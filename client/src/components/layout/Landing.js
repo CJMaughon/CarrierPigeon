@@ -1,23 +1,48 @@
 import React from 'react'
+import SplitPane from 'react-split-pane'
+import logo from '../../img/carrier_pigeon_landing.png';
 
 const Landing = () => {
-	return (
-    <section className="landing">
-      <div className="dark-overlay">
+  return (
+  <SplitPane split="vertical" defaultSize="50vw">
+    <div className="logo-container">
+      <div>
         <div className="landing-inner">
-          <h1 className="x-large">Developer Connector</h1>
+          <img src={logo} className="" alt="Logo" />
           <p className="lead">
-            Create a developer profile/portfolio, share posts and get help from
-            other developers
+            App for The Growing Leaders
           </p>
-          <div className="buttons">
-            <a href="register.html" className="btn btn-primary">Sign Up</a>
-            <a href="login.html" className="btn btn-light">Login</a>
-          </div>
         </div>
       </div>
-    </section>
-		)
+    </div>  
+    <div className="login-form-container">
+      <div>
+        <div className="alert alert-danger">
+          Invalid credentials
+        </div>
+        <form className="form" action="dashboard.html">
+          <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
+          <input
+          type="email"
+          placeholder="Email Address"
+          name="email"
+          required
+          />
+          <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          />
+          <button>Login</button>
+          <p className="my-1">
+            Don't have an account? <a href="register.html">Sign Up</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </SplitPane>
+    )
 }
+
 
 export default Landing;
