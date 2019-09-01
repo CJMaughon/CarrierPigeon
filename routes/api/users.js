@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {check, validationResult } = require("express-validator");
 const User = require('../../models/User');
+const {check, validationResult } = require("express-validator");
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
+
 // @route 	POST api/users
 // @desc	Test route
 // @access 	Public
@@ -35,11 +36,11 @@ router.post(
 				return res.status(400).json({ errors : [{msg: 'User already exists' }] });
 			}
 
-		    user = new User({
-		    	name,
-		    	email,
-		    	password
-		    })
+			user = new User({
+				name,
+				email,
+				password
+			})
 
 			// Encrypt password
 			const salt = await bcrypt.genSalt(10);
