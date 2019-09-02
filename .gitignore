@@ -2,3 +2,4 @@
 package-lock.json
 /config/keys.js
 /config/default.json
+/.vscode
