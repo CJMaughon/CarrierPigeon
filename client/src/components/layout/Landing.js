@@ -5,7 +5,7 @@ import logo from '../../img/carrier_pigeon_landing.png';
 
 const Landing = () => {
   const [isLoginVisible, setIsLoginVisible] = useState(true);
-  const [formData, setFormData] = useState({
+  const [registerFormData, setRegisterFormData] = useState({
     name: '',
     email: '',
     mobile: '',
@@ -13,17 +13,38 @@ const Landing = () => {
     password: '',
     password2: ''
   });
-  const { name, email, password, mobile, location, password2 } = formData;
+
+  const [loginFormData, setLoginFormData] = useState({
+    loginEmail: '',
+    loginPassword: ''
+  });
+  const { loginEmail, loginPassword } = loginFormData;
+  const {
+    name,
+    email,
+    password,
+    mobile,
+    location,
+    password2
+  } = registerFormData;
   const onSwitchFormButtonClick = e => setIsLoginVisible(!isLoginVisible);
   const onSignUpFormChange = e =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setRegisterFormData({
+      ...registerFormData,
+      [e.target.name]: e.target.value
+    });
+  const onLogInFormChange = e =>
+    setLoginFormData({
+      ...loginFormData,
+      [e.target.name]: e.target.value
+    });
   const type = 'Instructor';
   const onSubmitRegister = async e => {
     e.preventDefault();
     if (password !== password2) {
       console.log('Password does not match');
     } else {
-      console.log(formData);
+      console.log(registerFormData);
       const newUser = {
         name,
         email,
@@ -60,10 +81,18 @@ const Landing = () => {
           <input
             type='email'
             placeholder='Email Address'
-            name='email'
+            name='loginEmail'
+            value={loginEmail}
+            onChange={e => onLogInFormChange(e)}
             required
           />
-          <input type='password' placeholder='Password' name='password' />
+          <input
+            type='password'
+            placeholder='Password'
+            value={loginPassword}
+            onChange={e => onLogInFormChange(e)}
+            name='loginPassword'
+          />
           <button>Login</button>
         </form>
         <div className='sign-up-text'>
