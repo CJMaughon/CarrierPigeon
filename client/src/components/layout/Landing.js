@@ -12,7 +12,10 @@ const Landing = () => {
     password: '',
     password2: ''
   });
+  const { name, email, mobile, location, password, password2 } = formData;
   const onSwitchFormButtonClick = e => setIsLoginVisible(!isLoginVisible);
+  const onSignUpFormChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   let form = (
     <div className='login-form-container'>
       <div>
@@ -47,29 +50,50 @@ const Landing = () => {
             <p className='lead'>
               <i className='fas fa-user'></i> Register new Account
             </p>
-            <input type='text' placeholder='Full Name' name='name' required />
+            <input
+              type='text'
+              placeholder='Full Name'
+              name='name'
+              value={name}
+              onChange={e => onSignUpFormChange(e)}
+              required
+            />
             <input
               type='text'
               placeholder='Mobile Number'
-              name='mobile-number'
+              name='mobile'
+              value={mobile}
+              onChange={e => onSignUpFormChange(e)}
               required
             />
             <input
               type='text'
               placeholder='Location'
               name='location'
+              value={location}
+              onChange={e => onSignUpFormChange(e)}
               required
             />
             <input
               type='email'
               placeholder='Email Address'
+              value={email}
+              onChange={e => onSignUpFormChange(e)}
               name='email'
               required
             />
-            <input type='password' placeholder='Password' name='password' />
+            <input
+              type='password'
+              placeholder='Password'
+              value={password}
+              onChange={e => onSignUpFormChange(e)}
+              name='password'
+            />
             <input
               type='password'
               placeholder='Confirm Password'
+              value={password2}
+              onChange={e => onSignUpFormChange(e)}
               name='password2'
               minLength='6'
             />
