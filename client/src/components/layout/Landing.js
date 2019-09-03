@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
 
@@ -12,10 +13,42 @@ const Landing = () => {
     password: '',
     password2: ''
   });
-  const { name, email, mobile, location, password, password2 } = formData;
+  const { name, email, password, mobile, location, password2 } = formData;
   const onSwitchFormButtonClick = e => setIsLoginVisible(!isLoginVisible);
   const onSignUpFormChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  const type = 'Instructor';
+  const onSubmitRegister = async e => {
+    e.preventDefault();
+    if (password !== password2) {
+      console.log('Password does not match');
+    } else {
+      console.log(formData);
+      const newUser = {
+        name,
+        email,
+        password,
+        mobile,
+        location,
+        type
+      };
+
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+
+        const body = JSON.stringify(newUser);
+
+        const res = await axios.post('/api/users', body, config);
+        console.log(res);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    }
+  };
   let form = (
     <div className='login-form-container'>
       <div>
@@ -46,7 +79,7 @@ const Landing = () => {
     form = (
       <div className='login-form-container'>
         <div>
-          <form className='form'>
+          <form className='form' onSubmit={e => onSubmitRegister(e)}>
             <p className='lead'>
               <i className='fas fa-user'></i> Register new Account
             </p>

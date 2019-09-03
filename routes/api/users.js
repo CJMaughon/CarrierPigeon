@@ -15,6 +15,15 @@ router.post(
     check('name', 'Name is required')
       .not()
       .isEmpty(),
+    check('mobile', 'Mobile Number is required')
+      .not()
+      .isEmpty(),
+    check('location', 'Location is required')
+      .not()
+      .isEmpty(),
+    check('type', 'Type is required')
+      .not()
+      .isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
     check(
       'password',
@@ -26,7 +35,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password } = req.body;
+    const { name, email, password, mobile, location, type } = req.body;
 
     try {
       // See if user exists
@@ -41,7 +50,10 @@ router.post(
       user = new User({
         name,
         email,
-        password
+        password,
+        mobile,
+        location,
+        type
       });
 
       // Encrypt password
