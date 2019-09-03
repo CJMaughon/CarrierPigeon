@@ -10,6 +10,86 @@ class Landing extends React.Component {
 
   render() {
     const { isLoginVisible } = this.state;
+    let form = (
+      <div className='login-form-container'>
+        <div>
+          <div className='alert alert-danger'>Invalid credentials</div>
+          <form className='form' action='dashboard.html'>
+            <p className='lead'>
+              <i className='fas fa-user'></i> Sign into Your Account
+            </p>
+            <input
+              type='email'
+              placeholder='Email Address'
+              name='email'
+              required
+            />
+            <input type='password' placeholder='Password' name='password' />
+            <button>Login</button>
+          </form>
+          <div className='sign-up-text'>
+            <p>Don't have an account?</p>
+            <button
+              id='link'
+              onClick={() => this.setState({ isLoginVisible: !isLoginVisible })}
+            >
+              Sign Up
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+    if (!isLoginVisible) {
+      form = (
+        <div className='login-form-container'>
+          <div>
+            <form className='form'>
+              <p className='lead'>
+                <i className='fas fa-user'></i> Register new Account
+              </p>
+              <input type='text' placeholder='Full Name' name='name' required />
+              <input
+                type='text'
+                placeholder='Mobile Number'
+                name='mobile-number'
+                required
+              />
+              <input
+                type='text'
+                placeholder='Location'
+                name='location'
+                required
+              />
+              <input
+                type='email'
+                placeholder='Email Address'
+                name='email'
+                required
+              />
+              <input type='password' placeholder='Password' name='password' />
+              <input
+                type='password'
+                placeholder='Confirm Password'
+                name='password2'
+                minLength='6'
+              />
+              <button>Submit</button>
+            </form>
+            <div className='sign-up-text'>
+              <p>Already have an account?</p>
+              <button
+                id='link'
+                onClick={() =>
+                  this.setState({ isLoginVisible: !isLoginVisible })
+                }
+              >
+                Sign In
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <SplitPane split='vertical' defaultSize='50vw'>
         <div className='logo-container'>
@@ -20,39 +100,7 @@ class Landing extends React.Component {
             </div>
           </div>
         </div>
-        <div className='login-form-container'>
-          <div>
-            <div className='alert alert-danger'>Invalid credentials</div>
-            <form className='form' action='dashboard.html'>
-              <p className='lead'>
-                <i className='fas fa-user'></i> Sign into Your Account
-              </p>
-              <input
-                type='email'
-                placeholder='Email Address'
-                name='email'
-                required
-              />
-              <input type='password' placeholder='Password' name='password' />
-              <button>Login</button>
-            </form>
-            <div className='sign-up-text'>
-              {isLoginVisible ? (
-                <p>Don't have an account?</p>
-              ) : (
-                <p>Already have an account?</p>
-              )}
-              <button
-                id='link'
-                onClick={() =>
-                  this.setState({ isLoginVisible: !isLoginVisible })
-                }
-              >
-                {isLoginVisible ? 'Sign Up' : 'Sign In'}
-              </button>
-            </div>
-          </div>
-        </div>
+        {form}
       </SplitPane>
     );
   }
