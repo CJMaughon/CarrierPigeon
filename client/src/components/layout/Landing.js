@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
-const Landing = ({ setAlert }) => {
+const Landing = ({ setAlert, register }) => {
   const [isLoginVisible, setIsLoginVisible] = useState(true);
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
@@ -44,33 +44,9 @@ const Landing = ({ setAlert }) => {
   const onSubmitRegister = async e => {
     e.preventDefault();
     if (password !== password2) {
-      console.log('submit registration');
       setAlert('Passwords do not match', 'danger');
     } else {
-      console.log(registerFormData);
-      const newUser = {
-        name,
-        email,
-        password,
-        mobile,
-        location,
-        type
-      };
-
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        };
-
-        const body = JSON.stringify(newUser);
-
-        const res = await axios.post('/api/users', body, config);
-        console.log(res);
-      } catch (err) {
-        console.log(err.response.data);
-      }
+      register({ name, email, password, mobile, location, type });
     }
   };
   let form = (
@@ -159,7 +135,6 @@ const Landing = ({ setAlert }) => {
               value={password2}
               onChange={e => onSignUpFormChange(e)}
               name='password2'
-              minLength='6'
             />
             <button>Submit</button>
           </form>
@@ -189,10 +164,11 @@ const Landing = ({ setAlert }) => {
 };
 
 Landing.propTypes = {
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { setAlert }
+  { setAlert, register }
 )(Landing);
