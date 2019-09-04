@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Landing from './components/layout/Landing';
 import Routes from './components/routing/Routes';
 
 // Redux
@@ -25,7 +24,6 @@ const App = () => {
         <Fragment>
           <Alert />
           <Switch>
-            <Route exact path='/' component={Landing} />
             <Route component={Routes} />
           </Switch>
         </Fragment>

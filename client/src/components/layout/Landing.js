@@ -8,6 +8,9 @@ import { register } from '../../actions/auth';
 import { login } from '../../actions/auth';
 import PropTypes from 'prop-types';
 const Landing = ({ setAlert, register, login, isAuthenticated }) => {
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
   const [isLoginVisible, setIsLoginVisible] = useState(true);
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
@@ -59,9 +62,6 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
     login(loginEmail, loginPassword);
   };
 
-  if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
-  }
   let form = (
     <div className='login-form-container'>
       <div>
