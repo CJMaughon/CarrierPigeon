@@ -4,8 +4,9 @@ import logo from '../../img/carrier_pigeon_landing.png';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
+import { login } from '../../actions/auth';
 import PropTypes from 'prop-types';
-const Landing = ({ setAlert, register }) => {
+const Landing = ({ setAlert, register, login }) => {
   const [isLoginVisible, setIsLoginVisible] = useState(true);
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
@@ -15,6 +16,7 @@ const Landing = ({ setAlert, register }) => {
     password: '',
     password2: ''
   });
+  const type = 'Instructor';
 
   const [loginFormData, setLoginFormData] = useState({
     loginEmail: '',
@@ -35,12 +37,7 @@ const Landing = ({ setAlert, register }) => {
       ...registerFormData,
       [e.target.name]: e.target.value
     });
-  const onLogInFormChange = e =>
-    setLoginFormData({
-      ...loginFormData,
-      [e.target.name]: e.target.value
-    });
-  const type = 'Instructor';
+
   const onSubmitRegister = async e => {
     e.preventDefault();
     if (password !== password2) {
@@ -49,10 +46,21 @@ const Landing = ({ setAlert, register }) => {
       register({ name, email, password, mobile, location, type });
     }
   };
+
+  const onLogInFormChange = e =>
+    setLoginFormData({
+      ...loginFormData,
+      [e.target.name]: e.target.value
+    });
+  const onSubmitLogin = async e => {
+    e.preventDefault();
+    console.log(loginEmail, loginPassword);
+    login(loginEmail, loginPassword);
+  };
   let form = (
     <div className='login-form-container'>
       <div>
-        <form className='form' action='dashboard.html'>
+        <form className='form' onSubmit={e => onSubmitLogin(e)}>
           <p className='lead'>
             <i className='fas fa-user'></i> Sign into Your Account
           </p>
@@ -165,10 +173,11 @@ const Landing = ({ setAlert, register }) => {
 
 Landing.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { setAlert, register }
+  { setAlert, register, login }
 )(Landing);
