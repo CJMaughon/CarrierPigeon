@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import { login } from '../../actions/auth';
 import PropTypes from 'prop-types';
-const Landing = ({ setAlert, register, login }) => {
+const Landing = ({ setAlert, register, login, isAuthenticated }) => {
   const [isLoginVisible, setIsLoginVisible] = useState(true);
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
@@ -57,6 +58,10 @@ const Landing = ({ setAlert, register, login }) => {
     console.log(loginEmail, loginPassword);
     login(loginEmail, loginPassword);
   };
+
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
   let form = (
     <div className='login-form-container'>
       <div>
@@ -174,10 +179,15 @@ const Landing = ({ setAlert, register, login }) => {
 Landing.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  login: PropTypes.func.isRequired
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 };
 
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { setAlert, register, login }
 )(Landing);
