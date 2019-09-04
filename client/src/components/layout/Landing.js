@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
-
-const Landing = () => {
+import { connect } from 'react-redux';
+import { setAlert } from '../../actions/alert';
+import PropTypes from 'prop-types';
+const Landing = ({ setAlert }) => {
   const [isLoginVisible, setIsLoginVisible] = useState(true);
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
@@ -42,7 +44,8 @@ const Landing = () => {
   const onSubmitRegister = async e => {
     e.preventDefault();
     if (password !== password2) {
-      console.log('Password does not match');
+      console.log('submit registration');
+      setAlert('Passwords do not match', 'danger');
     } else {
       console.log(registerFormData);
       const newUser = {
@@ -73,7 +76,6 @@ const Landing = () => {
   let form = (
     <div className='login-form-container'>
       <div>
-        <div className='alert alert-danger'>Invalid credentials</div>
         <form className='form' action='dashboard.html'>
           <p className='lead'>
             <i className='fas fa-user'></i> Sign into Your Account
@@ -186,4 +188,11 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+Landing.propTypes = {
+  setAlert: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  { setAlert }
+)(Landing);

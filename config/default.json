@@ -1,4 +1,4 @@
 {
-  "mongoURI": "Paste your uri here",
+  "mongoURI": "mongodb+srv://admin:1234@cluster0-mf6ou.mongodb.net/test?retryWrites=true&w=majority",
   "jwtSecret": "jwtsecret"
 }
