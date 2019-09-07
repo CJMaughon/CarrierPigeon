@@ -48,6 +48,8 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
       setAlert('Passwords do not match', 'danger');
     } else {
       register({ name, email, password, mobile, location, type });
+      setAlert('Successfully created new account!', 'success');
+      setIsLoginVisible(true);
     }
   };
 

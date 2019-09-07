@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Alert from '../layout/Alert';
 import Landing from '../layout/Landing';
 import NotFound from '../layout/NotFound';
 import Dashboard from '../dashboard/Dashboard';
