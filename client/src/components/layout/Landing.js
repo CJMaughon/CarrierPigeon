@@ -85,6 +85,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
             value={loginPassword}
             onChange={e => onLogInFormChange(e)}
             name='loginPassword'
+            minlength='6'
           />
           <button>Login</button>
         </form>
@@ -143,6 +144,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
               value={password}
               onChange={e => onSignUpFormChange(e)}
               name='password'
+              minlength='6'
             />
             <input
               type='password'
@@ -150,6 +152,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
               value={password2}
               onChange={e => onSignUpFormChange(e)}
               name='password2'
+              minlength='6'
             />
             <button>Submit</button>
           </form>
