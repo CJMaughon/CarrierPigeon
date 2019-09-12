@@ -3,10 +3,8 @@ import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
+import { register, setAlert, login } from '../../actions/auth';
 import Alert from './Alert';
-import { login } from '../../actions/auth';
 import PropTypes from 'prop-types';
 const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
   if (isAuthenticated) {
@@ -46,7 +44,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
   const onSubmitRegister = async e => {
     e.preventDefault();
     if (password !== password2) {
-      setAlert('Passwords do not match', 'danger');
+      setAlert('Passwords do not match');
     } else {
       await register({ name, email, password, mobile, location, type });
       if (!hasError) {

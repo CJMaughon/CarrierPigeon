@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { setAlert } from './alert';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -7,10 +6,20 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT
+  LOGOUT,
+  INPUT_ERROR
 } from './types';
 
 import setAuthToken from '../utils/setAuthToken';
+
+//set Error
+
+export const setAlert = msg => dispatch => {
+  dispatch({
+    type: INPUT_ERROR,
+    payload: msg
+  });
+};
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -57,7 +66,7 @@ export const register = ({
 
   try {
     const res = await axios.post('/api/users', body, config);
-    setAlert('Successfully created new account!', 'success');
+    // setAlert('Successfully created new account!', 'success');
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -66,7 +75,8 @@ export const register = ({
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+      console.log(errors);
+      dispatch(setAlert(errors[0].msg));
     }
 
     dispatch({
@@ -97,7 +107,8 @@ export const login = (email, password) => async dispatch => {
     const errors = err.response.data.errors;
 
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg)));
+      console.log(errors);
+      dispatch(setAlert(errors[0].msg));
     }
 
     dispatch({

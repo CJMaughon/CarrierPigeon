@@ -2,20 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const Alert = ({ alerts }) =>
-  alerts !== null &&
-  alerts.length > 0 && (
-    <div key={alerts[0].id} className='error-text'>
-      {alerts[0].msg}
-    </div>
-  );
+const Alert = ({ error }) =>
+  error !== null && <div className='error-text'>{error}</div>;
 
 Alert.propTypes = {
-  alerts: PropTypes.array.isRequired
+  error: PropTypes.string
 };
 
 const mapStateToProps = state => ({
-  alerts: state.alert
+  error: state.auth.error
 });
 
 export default connect(mapStateToProps)(Alert);
