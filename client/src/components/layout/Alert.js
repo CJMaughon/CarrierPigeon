@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 
 const Alert = ({ alerts }) =>
   alerts !== null &&
-  alerts.length > 0 &&
-  alerts.map(alert => (
-    <div key={alert.id} className={`alert alert-${alert.alertType}`}>
-      {alert.msg}
+  alerts.length > 0 && (
+    <div key={alerts[0].id} className='error-text'>
+      {alerts[0].msg}
     </div>
-  ));
+  );
 
 Alert.propTypes = {
   alerts: PropTypes.array.isRequired

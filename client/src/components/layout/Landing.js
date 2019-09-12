@@ -5,9 +5,10 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
+import Alert from './Alert';
 import { login } from '../../actions/auth';
 import PropTypes from 'prop-types';
-const Landing = ({ setAlert, register, login, isAuthenticated }) => {
+const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
@@ -47,9 +48,10 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      register({ name, email, password, mobile, location, type });
-      setAlert('Successfully created new account!', 'success');
-      setIsLoginVisible(true);
+      await register({ name, email, password, mobile, location, type });
+      if (!hasError) {
+        setIsLoginVisible(true);
+      }
     }
   };
 
@@ -85,9 +87,10 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
             value={loginPassword}
             onChange={e => onLogInFormChange(e)}
             name='loginPassword'
-            minlength='6'
+            minLength='6'
           />
           <button>Login</button>
+          <Alert></Alert>
         </form>
         <div className='sign-up-text'>
           <p>Don't have an account?</p>
@@ -144,7 +147,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
               value={password}
               onChange={e => onSignUpFormChange(e)}
               name='password'
-              minlength='6'
+              minLength='6'
             />
             <input
               type='password'
@@ -152,7 +155,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
               value={password2}
               onChange={e => onSignUpFormChange(e)}
               name='password2'
-              minlength='6'
+              minLength='6'
             />
             <button>Submit</button>
           </form>
@@ -161,6 +164,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
             <button id='link' onClick={onSwitchFormButtonClick}>
               Sign In
             </button>
+            <Alert></Alert>
           </div>
         </div>
       </div>
@@ -185,11 +189,13 @@ Landing.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  hasError: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  hasError: state.auth.hasError
 });
 
 export default connect(

@@ -57,7 +57,7 @@ export const register = ({
 
   try {
     const res = await axios.post('/api/users', body, config);
-
+    setAlert('Successfully created new account!', 'success');
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -65,7 +65,6 @@ export const register = ({
     dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
-
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
@@ -98,7 +97,7 @@ export const login = (email, password) => async dispatch => {
     const errors = err.response.data.errors;
 
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach(error => dispatch(setAlert(error.msg)));
     }
 
     dispatch({
