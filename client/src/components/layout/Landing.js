@@ -19,7 +19,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
     password: '',
     password2: ''
   });
-  const type = 'Instructor';
+  const isInstructor = true;
 
   const [loginFormData, setLoginFormData] = useState({
     loginEmail: '',
@@ -46,7 +46,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
     if (password !== password2) {
       setAlert('Passwords do not match');
     } else {
-      await register({ name, email, password, mobile, location, type });
+      await register({ name, email, password, mobile, location, isInstructor });
       if (!hasError) {
         setIsLoginVisible(true);
       }
