@@ -15,7 +15,7 @@ import setAuthToken from '../utils/setAuthToken';
 
 //set Error
 
-export const setAlert = msg => dispatch => {
+export const setError = msg => dispatch => {
   dispatch({
     type: INPUT_ERROR,
     payload: msg
@@ -73,7 +73,7 @@ export const register = ({
 
   try {
     const res = await axios.post('/api/users', body, config);
-    // setAlert('Successfully created new account!', 'success');
+    // setError('Successfully created new account!', 'success');
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -83,7 +83,7 @@ export const register = ({
     const errors = err.response.data.errors;
     if (errors) {
       console.log(errors);
-      dispatch(setAlert(errors[0].msg));
+      dispatch(setError(errors[0].msg));
     }
 
     dispatch({
@@ -115,7 +115,7 @@ export const login = (email, password) => async dispatch => {
 
     if (errors) {
       console.log(errors);
-      dispatch(setAlert(errors[0].msg));
+      dispatch(setError(errors[0].msg));
     }
 
     dispatch({

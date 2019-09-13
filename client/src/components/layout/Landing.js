@@ -3,13 +3,13 @@ import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { register, setAlert, login, switchForm } from '../../actions/auth';
-import Alert from './Alert';
+import { register, setError, login, switchForm } from '../../actions/auth';
+import Error from './Alert';
 import PropTypes from 'prop-types';
 const Landing = ({
   switchForm,
   isLoginFormVisible,
-  setAlert,
+  setError,
   register,
   login,
   isAuthenticated
@@ -51,7 +51,7 @@ const Landing = ({
   const onSubmitRegister = async e => {
     e.preventDefault();
     if (password !== password2) {
-      setAlert('Passwords do not match');
+      setError('Passwords do not match');
     } else {
       await register({ name, email, password, mobile, location, isInstructor });
     }
@@ -92,7 +92,7 @@ const Landing = ({
             minLength='6'
           />
           <button>Login</button>
-          <Alert></Alert>
+          <Error></Error>
         </form>
         <div className='sign-up-text'>
           <p>Don't have an account?</p>
@@ -160,13 +160,13 @@ const Landing = ({
               minLength='6'
             />
             <button>Submit</button>
+            <Error></Error>
           </form>
           <div className='sign-up-text'>
             <p>Already have an account?</p>
             <button id='link' onClick={onSwitchFormButtonClick}>
               Sign In
             </button>
-            <Alert></Alert>
           </div>
         </div>
       </div>
@@ -188,7 +188,7 @@ const Landing = ({
 };
 
 Landing.propTypes = {
-  setAlert: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
   switchForm: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
@@ -203,5 +203,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { setAlert, register, login, switchForm }
+  { setError, register, login, switchForm }
 )(Landing);

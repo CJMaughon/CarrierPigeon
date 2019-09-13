@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const Alert = ({ error }) =>
+const Error = ({ error }) =>
   error !== null && <div className='error-text'>{error}</div>;
 
-Alert.propTypes = {
+Error.propTypes = {
   error: PropTypes.string
 };
 
@@ -13,4 +13,4 @@ const mapStateToProps = state => ({
   error: state.auth.error
 });
 
-export default connect(mapStateToProps)(Alert);
+export default connect(mapStateToProps)(Error);
