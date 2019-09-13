@@ -7,7 +7,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  INPUT_ERROR
+  INPUT_ERROR,
+  FORM_SWITCH
 } from './types';
 
 import setAuthToken from '../utils/setAuthToken';
@@ -21,6 +22,12 @@ export const setAlert = msg => dispatch => {
   });
 };
 
+export const switchForm = isLoginVisible => dispatch => {
+  dispatch({
+    type: FORM_SWITCH,
+    payload: isLoginVisible
+  });
+};
 // Load User
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {

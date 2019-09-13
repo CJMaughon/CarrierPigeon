@@ -3,14 +3,21 @@ import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { register, setAlert, login } from '../../actions/auth';
+import { register, setAlert, login, switchForm } from '../../actions/auth';
 import Alert from './Alert';
 import PropTypes from 'prop-types';
-const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
+const Landing = ({
+  switchForm,
+  isLoginFormVisible,
+  setAlert,
+  register,
+  login,
+  isAuthenticated
+}) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
-  const [isLoginVisible, setIsLoginVisible] = useState(true);
+
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
     email: '',
@@ -34,7 +41,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
     location,
     password2
   } = registerFormData;
-  const onSwitchFormButtonClick = e => setIsLoginVisible(!isLoginVisible);
+  const onSwitchFormButtonClick = e => switchForm(!isLoginFormVisible);
   const onSignUpFormChange = e =>
     setRegisterFormData({
       ...registerFormData,
@@ -47,9 +54,6 @@ const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
       setAlert('Passwords do not match');
     } else {
       await register({ name, email, password, mobile, location, isInstructor });
-      if (!hasError) {
-        setIsLoginVisible(true);
-      }
     }
   };
 
@@ -99,7 +103,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
       </div>
     </div>
   );
-  if (!isLoginVisible) {
+  if (!isLoginFormVisible) {
     form = (
       <div className='login-form-container'>
         <div>
@@ -185,18 +189,19 @@ const Landing = ({ setAlert, register, login, isAuthenticated, hasError }) => {
 
 Landing.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  switchForm: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
-  hasError: PropTypes.bool
+  isLoginFormVisible: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  hasError: state.auth.hasError
+  isLoginFormVisible: state.auth.isLoginFormVisible
 });
 
 export default connect(
   mapStateToProps,
-  { setAlert, register, login }
+  { setAlert, register, login, switchForm }
 )(Landing);

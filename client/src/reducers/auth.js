@@ -6,12 +6,14 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  INPUT_ERROR
+  INPUT_ERROR,
+  FORM_SWITCH
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
+  isLoginFormVisible: true,
   error: null,
   loading: true,
   user: null
@@ -32,6 +34,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         error: payload
+      };
+    case FORM_SWITCH:
+      return {
+        ...state,
+        isLoginFormVisible: payload
       };
     case REGISTER_SUCCESS:
       return {
