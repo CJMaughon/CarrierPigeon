@@ -26,6 +26,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-validator": "^6.2.0",
+    "googleapis": "^43.0.0",
     "gravatar": "^1.6.0",
     "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.2.5",
