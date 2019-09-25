@@ -32,25 +32,26 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password, mobile, location, isInstructor } = req.body;
-
+    const { name, email, password, mobile, location } = req.body;
     try {
       // See if user exists
       let user = await User.findOne({ email });
-
       if (user) {
         return res
           .status(400)
           .json({ errors: [{ msg: 'User already exists' }] });
       }
-
+      const isInstructor = true;
+      const isUserApproved = false;
       user = new User({
         name,
         email,
         password,
         mobile,
         location,
-        isInstructor
+        isInstructor,
+        isUserApproved
+
       });
 
       // Encrypt password

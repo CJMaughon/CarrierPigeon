@@ -26,7 +26,6 @@ const Landing = ({
     password: '',
     password2: ''
   });
-  const isInstructor = true;
 
   const [loginFormData, setLoginFormData] = useState({
     loginEmail: '',
@@ -53,7 +52,7 @@ const Landing = ({
     if (password !== password2) {
       setError('Passwords do not match');
     } else {
-      await register({ name, email, password, mobile, location, isInstructor });
+      await register(name, email, password, mobile, location);
     }
   };
 

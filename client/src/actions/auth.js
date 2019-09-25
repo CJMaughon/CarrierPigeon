@@ -49,14 +49,14 @@ export const loadUser = () => async dispatch => {
 };
 
 // Register User
-export const register = ({
+export const register = (
   name,
   email,
   password,
   mobile,
   location,
-  type
-}) => async dispatch => {
+  isIntructor
+) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -67,10 +67,8 @@ export const register = ({
     email,
     password,
     mobile,
-    location,
-    type
+    location
   });
-
   try {
     const res = await axios.post('/api/users', body, config);
     // setError('Successfully created new account!', 'success');
