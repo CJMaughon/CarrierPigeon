@@ -12,12 +12,23 @@ const Landing = ({
   setError,
   register,
   login,
-  isAuthenticated
+  isAuthenticated,
+  isInstructor,
+  isUserApproved
 }) => {
   if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
-  }
+    if (isUserApproved === false) {
+      return <Redirect to='/unapproved_page' />;
+    }
+    if (isInstructor === true) {
+      return <Redirect to='/instructor_dashboard' />;
 
+    }
+    if (isInstructor === false) {
+      return <Redirect to='/admin_dashboard' />;
+    }
+
+  }
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
     email: '',
@@ -63,7 +74,6 @@ const Landing = ({
     });
   const onSubmitLogin = async e => {
     e.preventDefault();
-    console.log(loginEmail, loginPassword);
     login(loginEmail, loginPassword);
   };
 
@@ -192,11 +202,15 @@ Landing.propTypes = {
   register: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
-  isLoginFormVisible: PropTypes.bool
+  isInstructor: PropTypes.bool,
+  isUserApproved: PropTypes.bool,
+  isLoginFormVisible: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
+  isInstructor: state.auth.isInstructor,
+  isUserApproved: state.auth.isUserApproved,
   isLoginFormVisible: state.auth.isLoginFormVisible
 });
 

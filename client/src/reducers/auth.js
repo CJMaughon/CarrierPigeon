@@ -13,6 +13,8 @@ import {
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
+  isInstructor: null,
+  isUserApproved: null,
   isLoginFormVisible: true,
   error: null,
   loading: true,
@@ -28,7 +30,10 @@ export default function (state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload
+        user: payload,
+        isInstructor: payload.isInstructor,
+        isUserApproved: payload.isUserApproved
+
       };
     case INPUT_ERROR:
       return {
