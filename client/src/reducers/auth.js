@@ -19,7 +19,7 @@ const initialState = {
   user: null
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -45,6 +45,7 @@ export default function(state = initialState, action) {
         ...state,
         ...payload,
         isAuthenticated: false,
+        isLoginFormVisible: true,
         loading: false
       };
     case LOGIN_SUCCESS:
