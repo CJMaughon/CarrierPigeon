@@ -11,7 +11,7 @@ const Routes = () => {
     <section className='container'>
       <Switch>
         <Route exact path='/' component={Landing} />
-        <PrivateRoute exact path='/admin_dashboard' component={AdminDashboard} />
+        <Route exact path='/admin_dashboard' component={AdminDashboard} />
         <PrivateRoute exact path='/instructor_dashboard' component={InstructorDashboard} />
         <PrivateRoute exact path='/unapproved_page' component={UnapprovedUserPage} />
         <Route component={NotFound} />
