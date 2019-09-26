@@ -6640,6 +6640,11 @@ react-style-proptype@^3.0.0:
   dependencies:
     prop-types "^15.5.4"
 
+react-table@^7.0.0-beta.1:
+  version "7.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.0.0-beta.1.tgz#9e27e559a0e145f0d615fab398f9c635212510fb"
+  integrity sha512-63fZR8yo0g+OHAEo+DAbmcczLaxBi1lJmGgSH6+lziZnaOfYPhu+gSFzW03BCzdk19oyS/2MQjU1EjviwJeAKw==
+
 react@^16.4.2:
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.9.0.tgz#40ba2f9af13bc1a38d75dbf2f4359a5185c4f7aa"
