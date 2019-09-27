@@ -8,12 +8,17 @@ const assignments = [
   {
     name: 'Task 1',
     status: 'Submitted',
-    statusDate: '01/13/2020'
+    statusDate: '09/13/2019'
   },
   {
     name: 'Task 2',
-    status: 'Due',
-    statusDate: '01/14/2200'
+    status: 'Overdue',
+    statusDate: '09/26/2019'
+  },
+  {
+    name: 'Task 3',
+    status: 'Upcoming',
+    statusDate: '01/25/2020'
   }
 ];
 
@@ -24,13 +29,13 @@ const InstructorDashboard = ({ logout, assigns }) => {
     )
   });
   const headers = ['To Do', 'History'];
-  const contents = [<ul>{items}</ul>, <ul>{items}</ul>];
+  const contents = [<ul>{items.filter(a => a.props.children.props.status !== 'Submitted')}</ul>, <ul>{items.filter(a => a.props.children.props.status === 'Submitted')}</ul>];
   const tabs = <TabContainer headers={headers} content={contents} />
   return (
     <section className='landing'>
       <div className='dark-overlay'>
         <div className='landing-inner'>
-          <h1 className='x-large'>Instructor Dashboard</h1>
+          <h1 className='large'>Instructor Dashboard</h1>
           {tabs}
           <button onClick={logout}>LOG OUT</button>
         </div>
