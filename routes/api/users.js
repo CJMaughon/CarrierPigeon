@@ -5,9 +5,9 @@ const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
-
+const auth = require('../../middleware/auth');
 // @route 	POST api/users
-// @desc	Test route
+// @desc	Route to create new users
 // @access 	Public
 router.post(
   '/',
@@ -81,4 +81,18 @@ router.post(
     }
   }
 );
+
+// @route 	GET api/users/approved
+// @desc	Test route
+// @access 	Public
+router.get('/approved', auth, async (req, res) => {
+  try {
+    const posts = await User.find({ isInstructor: { $eq: true }, isUserApproved: { $eq: true } }).sort({ date: -1 });
+    res.json(posts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;
