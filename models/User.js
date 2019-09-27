@@ -23,8 +23,12 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  type: {
-    type: String,
+  isInstructor: {
+    type: Boolean,
+    required: true
+  },
+  isUserApproved: {
+    type: Boolean,
     required: true
   },
   date: {

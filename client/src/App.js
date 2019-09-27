@@ -6,7 +6,6 @@ import Routes from './components/routing/Routes';
 import { Provider } from 'react-redux';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
-import Alert from './components/layout/Alert';
 import './App.css';
 import { loadUser } from './actions/auth';
 if (localStorage.token) {
@@ -22,7 +21,6 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <Fragment>
-          <Alert />
           <Switch>
             <Route component={Routes} />
           </Switch>

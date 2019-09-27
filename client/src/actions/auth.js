@@ -1,16 +1,33 @@
 import axios from 'axios';
-import { setAlert } from './alert';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAIL
+  LOGIN_FAIL,
+  LOGOUT,
+  INPUT_ERROR,
+  FORM_SWITCH
 } from './types';
 
 import setAuthToken from '../utils/setAuthToken';
 
+//set Error
+
+export const setError = msg => dispatch => {
+  dispatch({
+    type: INPUT_ERROR,
+    payload: msg
+  });
+};
+
+export const switchForm = isLoginVisible => dispatch => {
+  dispatch({
+    type: FORM_SWITCH,
+    payload: isLoginVisible
+  });
+};
 // Load User
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
@@ -19,7 +36,7 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get('/api/auth');
-
+    console.log(res);
     dispatch({
       type: USER_LOADED,
       payload: res.data
@@ -32,14 +49,14 @@ export const loadUser = () => async dispatch => {
 };
 
 // Register User
-export const register = ({
+export const register = (
   name,
   email,
   password,
   mobile,
   location,
-  type
-}) => async dispatch => {
+  isIntructor
+) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -50,13 +67,11 @@ export const register = ({
     email,
     password,
     mobile,
-    location,
-    type
+    location
   });
-
   try {
     const res = await axios.post('/api/users', body, config);
-
+    // setError('Successfully created new account!', 'success');
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -64,9 +79,9 @@ export const register = ({
     dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
-
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+      console.log(errors);
+      dispatch(setError(errors[0].msg));
     }
 
     dispatch({
@@ -97,11 +112,17 @@ export const login = (email, password) => async dispatch => {
     const errors = err.response.data.errors;
 
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+      console.log(errors);
+      dispatch(setError(errors[0].msg));
     }
 
     dispatch({
       type: LOGIN_FAIL
     });
   }
+};
+
+// Logout
+export const logout = () => dispatch => {
+  dispatch({ type: LOGOUT });
 };
