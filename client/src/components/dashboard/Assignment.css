@@ -1,0 +1,29 @@
+.assignment-record {
+    display: flex;
+    flex-direction: row;
+    min-width: 33vw;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.assignment-record:hover {
+    background-color: black;
+}
+
+.assignment-record > p:first-child {
+    font-size: 200%;
+    margin-right: 50px;
+}
+
+.assignment-record > p:last-child {
+    display: block;
+    margin-left: auto;
+    font-size: 300%;
+    cursor: pointer;
+}
