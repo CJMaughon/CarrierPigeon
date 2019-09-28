@@ -30,6 +30,7 @@ export default function (state = initialState, action) {
                 loading: false,
                 isToCreateAssignmentPage: true
             };
+
         case USERS_ERROR:
             return {
                 ...state,

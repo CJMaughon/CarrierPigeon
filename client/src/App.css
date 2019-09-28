@@ -565,6 +565,9 @@ img {
 .form button:focus {
   background: #43a047;
 }
+.btn-next:disabled {
+  background: gray;
+}
 .form .message {
   margin: 15px 0 0;
   color: #b3b3b3;
