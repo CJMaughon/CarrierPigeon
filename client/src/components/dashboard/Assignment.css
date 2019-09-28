@@ -14,6 +14,7 @@
 
 .assignment-record:hover {
     background-color: black;
+    cursor: pointer;
 }
 
 .assignment-record > p:first-child {
