@@ -21,10 +21,10 @@ export const getUsers = () => async dispatch => {
     }
 };
 
-export const setSelectedUsers = selectedUsers => async dispatch => {
+export const setSelectedUsers = (ids, names) => async dispatch => {
     dispatch({
         type: SET_SELECTED_USERS,
-        payload: selectedUsers
+        payload: { ids: ids, names: names }
     });
 };
 

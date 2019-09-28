@@ -89,7 +89,7 @@ const CreateAssignment = ({ getUsers, setSelectedUsers, user: { users, loading }
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
-    const onNextButtonClick = e => setSelectedUsers(idsSelected);
+    const onNextButtonClick = e => setSelectedUsers(idsSelected, selected);
     return loading ? (
         <Spinner />
     ) : (

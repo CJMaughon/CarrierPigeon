@@ -523,7 +523,7 @@ img {
   position: relative;
   z-index: 1;
   background: #ffffff;
-  margin: 0.5rem;
+  margin: 0.5rem 4rem;
   padding: 20px 200px 100px 200px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -662,4 +662,8 @@ img {
 }
 body {
   font-family: 'Roboto', sans-serif;
+}
+
+.picker {
+  margin: 30px;
 }

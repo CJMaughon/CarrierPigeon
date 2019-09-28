@@ -4,8 +4,8 @@ import Navbar from '../layout/Navbar'
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
-const AssignmentInfoForm = ({ auth: { user } }) => {
+import { DatePicker } from "@material-ui/pickers";
+const AssignmentInfoForm = ({ selectedUsers, names }) => {
     const useStyles = makeStyles(theme => ({
         container: {
             display: 'flex',
@@ -25,12 +25,11 @@ const AssignmentInfoForm = ({ auth: { user } }) => {
     const classes = useStyles();
     const [assigmentFormData, setAssignmentFormData] = useState({
         name: '',
-        due_date: '',
+        due_date: new Date(),
         detail_info: '',
     });
     const {
         name,
-        due_date,
         detail_info,
     } = assigmentFormData;
     const onAssignmentFormChange = e =>
@@ -38,6 +37,12 @@ const AssignmentInfoForm = ({ auth: { user } }) => {
             ...assigmentFormData,
             [e.target.name]: e.target.value
         });
+    const [selectedDate, handleDateChange] = useState(new Date());
+    // const items = assignments.map(a => {
+    //     return (
+    //         <li key={a.name} className="assignment-item"><Assignment {...a} /></li>
+    //     )
+    // });
     return (
         <div>
             <Navbar />
@@ -70,6 +75,10 @@ const AssignmentInfoForm = ({ auth: { user } }) => {
                         margin="normal"
                         variant="filled"
                     />
+
+                    <div className="picker">
+                        <DatePicker value={selectedDate} onChange={handleDateChange} />
+                    </div>
                     <button className='btn-next' >Submit</button>
                 </form>
             </Fragment>
@@ -79,11 +88,13 @@ const AssignmentInfoForm = ({ auth: { user } }) => {
 };
 
 AssignmentInfoForm.propTypes = {
-    auth: PropTypes.object.isRequired,
+    selectedUsers: PropTypes.array.isRequired,
+    names: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth,
+    selectedUsers: state.user.selectedUsers,
+    names: state.user.selectedUsersName,
 });
 export default connect(
     mapStateToProps,

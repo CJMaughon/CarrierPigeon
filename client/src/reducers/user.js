@@ -7,6 +7,7 @@ import {
 const initialState = {
     users: [],
     selectedUsers: [],
+    selectedUsersName: [],
     user: null,
     loading: true,
     error: {},
@@ -26,7 +27,8 @@ export default function (state = initialState, action) {
         case SET_SELECTED_USERS:
             return {
                 ...state,
-                selectedUsers: payload,
+                selectedUsers: payload.ids,
+                selectedUsersName: payload.names,
                 loading: false,
                 isToCreateAssignmentPage: true
             };
