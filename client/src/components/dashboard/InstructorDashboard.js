@@ -6,30 +6,54 @@ import Assignment from './Assignment';
 import TabContainer from './TabContainer';
 const assignments = [
   {
+    id: 0,
     name: 'Task 1',
     status: 'Submitted',
-    statusDate: '09/13/2019'
+    statusDate: new Date(2019, 6, 25)
   },
   {
+    id: 1, 
     name: 'Task 2',
-    status: 'Overdue',
-    statusDate: '09/26/2019'
+    status: 'Submitted',
+    statusDate: new Date(2019, 7, 25)
   },
   {
+    id: 2,
     name: 'Task 3',
+    status: 'Overdue',
+    statusDate: new Date(2019, 8, 25)
+  },
+  {
+    id: 3,
+    name: 'Task 4',
     status: 'Upcoming',
-    statusDate: '01/25/2020'
+    statusDate: new Date(2019, 9, 25)
+  },
+  {
+    id: 4,
+    name: 'Task 5',
+    status: 'Upcoming',
+    statusDate: new Date(2019, 10, 25)
   }
 ];
 
 const InstructorDashboard = ({ logout, assigns }) => {
-  const items = assignments.map(a => {
+  const todoItems = assignments.filter(a => a.status !== 'Submitted').sort((a, b) => {
+    return a.statusDate - b.statusDate;
+  }).map(a => {
+    return (
+      <li key={a.id} className="assignment-item"><Assignment {...a} /></li>
+    )
+  });
+  const historyItems = assignments.filter(a => a.status === 'Submitted').sort((a, b) => {
+    return a.statusDate - b.statusDate;
+  }).map(a => {
     return (
       <li key={a.name} className="assignment-item"><Assignment {...a} /></li>
     )
   });
   const headers = ['To Do', 'History'];
-  const contents = [<ul>{items.filter(a => a.props.children.props.status !== 'Submitted')}</ul>, <ul>{items.filter(a => a.props.children.props.status === 'Submitted')}</ul>];
+  const contents = [<ul>{todoItems}</ul>, <ul>{historyItems}</ul>];
   const tabs = <TabContainer headers={headers} content={contents} />
   return (
     <section className='landing'>
@@ -37,7 +61,7 @@ const InstructorDashboard = ({ logout, assigns }) => {
         <div className='landing-inner'>
           <h1 className='large'>Instructor Dashboard</h1>
           {tabs}
-          <button onClick={logout}>LOG OUT</button>
+          <button className='tab-header' onClick={logout}>LOG OUT</button>
         </div>
       </div>
     </section>

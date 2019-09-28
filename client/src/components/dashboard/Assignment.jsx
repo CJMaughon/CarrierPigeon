@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './Assignment.css';
+import { format } from 'url';
+
+const formatDate = date => {
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() + 1900}`;
+}
 
 const Assignment = ({ name, status, statusDate }) => {
     // TODO: Translate date?
@@ -9,7 +14,7 @@ const Assignment = ({ name, status, statusDate }) => {
             <p>{name}</p>
             <div className="assignment-status">
                 <p>{status}</p>
-                <p>{statusDate}</p>
+                <p>{formatDate(statusDate)}</p>
             </div>
             <p>&gt;</p>
         </div>
