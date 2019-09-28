@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Spinner from '../layout/Spinner';
 import { getAssignments } from '../../actions/assignment';
 import Navbar from '../layout/Navbar'
 import PropTypes from 'prop-types';
@@ -12,7 +13,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-const AdminDashboard = ({ getAssignments, assignments, auth: { user } }) => {
+const AdminDashboard = ({ getAssignments, loading, assignments, auth: { user } }) => {
 
   useEffect(() => {
     getAssignments();
@@ -52,32 +53,34 @@ const AdminDashboard = ({ getAssignments, assignments, auth: { user } }) => {
   const CustomizedTables = () => {
     const classes = useStyles();
 
-    return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Assignment Name</StyledTableCell>
-              <StyledTableCell align="right">Due Date</StyledTableCell>
-              <StyledTableCell align="right">Details</StyledTableCell>
-              <StyledTableCell align="right">Number of Instructors</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {assignments.map(row => (
-              <StyledTableRow key={row.name}>
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{new Date(row.dueDate).toLocaleDateString()}</StyledTableCell>
-                <StyledTableCell align="right">{row.detail}</StyledTableCell>
-                <StyledTableCell align="right">{row.assignedInstructors.length}</StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    );
+    return loading ? (
+      <Spinner />
+    ) : (
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Assignment Name</StyledTableCell>
+                <StyledTableCell align="right">Due Date</StyledTableCell>
+                <StyledTableCell align="right">Details</StyledTableCell>
+                <StyledTableCell align="right">Number of Instructors</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {assignments.map(row => (
+                <StyledTableRow key={row.name}>
+                  <StyledTableCell component="th" scope="row">
+                    {row.name}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{new Date(row.dueDate).toLocaleDateString()}</StyledTableCell>
+                  <StyledTableCell align="right">{row.detail}</StyledTableCell>
+                  <StyledTableCell align="right">{row.assignedInstructors.length}</StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      );
   }
   return (
     <section className='landing'>
@@ -104,7 +107,8 @@ AdminDashboard.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  assignments: state.assignment.assignments
+  assignments: state.assignment.assignments,
+  loading: state.assignment.loading
 });
 export default connect(
   mapStateToProps,

@@ -11,10 +11,10 @@ const AssignmentSchema = new Schema({
         type: String,
         required: true
     },
-    assignedInstructors: {
-        type: Array,
+    assignedInstructors: [{
+        type: String,
         required: true
-    },
+    }],
     dueDate: {
         type: Date,
         required: true
