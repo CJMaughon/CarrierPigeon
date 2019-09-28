@@ -11,7 +11,7 @@ const auth = require('../../middleware/auth');
 // @desc	Route to create new assignments
 // @access 	Public
 router.post(
-    '/', auth,
+    '/',
     [
         check('name', 'Name is required')
             .not()
@@ -19,7 +19,7 @@ router.post(
         check('detail', 'Detail is required')
             .not()
             .isEmpty(),
-        check('instructors', 'Assigned Instructors are required')
+        check('assignedInstructors', 'Assigned Instructors are required')
             .not()
             .isEmpty(),
         check('dueDate', 'Please include a valid due date')
@@ -32,13 +32,12 @@ router.post(
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-
-        const { name, detail, instructors, dueDate } = req.body;
+        const { name, detail, assignedInstructors, dueDate } = req.body;
         try {
             assignment = new Assignment({
                 name,
                 detail,
-                instructors,
+                assignedInstructors,
                 dueDate,
             });
             await assignment.save();
@@ -48,6 +47,7 @@ router.post(
                     id: assignment._id
                 }
             };
+            res.json(payload);
         } catch (err) {
             console.log(err.message);
             res.status(500).send('Server error');
@@ -58,7 +58,7 @@ router.post(
 
 // @route 	GET api/assignments
 // @access 	Public
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const assignments = await Assignment.find().sort({ date: -1 });
         res.json(assignments);

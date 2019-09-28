@@ -12,7 +12,7 @@ const AssignmentSchema = new Schema({
         required: true
     },
     assignedInstructors: [{
-        type: String,
+        type: [String],
         required: true
     }],
     dueDate: {
