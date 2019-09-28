@@ -18,7 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Link } from 'react-router-dom';
-const CreateAssignment = ({ getUnapprovedUsers, approveUsers, user: { users, loading } }) => {
+const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading } }) => {
 
     useEffect(() => {
         getUnapprovedUsers();
@@ -346,7 +346,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-CreateAssignment.propTypes = {
+UserApprove.propTypes = {
     user: PropTypes.object.isRequired,
     getUnapprovedUsers: PropTypes.func.isRequired,
     approveUsers: PropTypes.func.isRequired,
@@ -358,4 +358,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { getUnapprovedUsers, approveUsers }
-)(CreateAssignment);
+)(UserApprove);

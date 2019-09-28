@@ -80,7 +80,7 @@ const Landing = ({
   let form = (
     <div className='login-form-container'>
       <div>
-        <form className='form' onSubmit={e => onSubmitLogin(e)}>
+        <form className='form-a' onSubmit={e => onSubmitLogin(e)}>
           <p className='lead'>
             <i className='fas fa-user'></i> Sign into Your Account
           </p>
@@ -116,7 +116,7 @@ const Landing = ({
     form = (
       <div className='login-form-container'>
         <div>
-          <form className='form' onSubmit={e => onSubmitRegister(e)}>
+          <form className='form-a' onSubmit={e => onSubmitRegister(e)}>
             <p className='lead'>
               <i className='fas fa-user'></i> Register new Account
             </p>

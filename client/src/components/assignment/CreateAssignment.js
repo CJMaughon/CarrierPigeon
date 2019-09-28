@@ -17,11 +17,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Redirect } from 'react-router-dom';
-const CreateAssignment = ({ getUsers, setSelectedUsers, user: { users, loading, isToCreateAssignmentPage } }) => {
-    if (isToCreateAssignmentPage) {
-        return <Redirect to='/create_assignment/details' />;
-    }
+import { Link } from 'react-router-dom';
+const CreateAssignment = ({ getUsers, setSelectedUsers, user: { users, loading } }) => {
+
     useEffect(() => {
         getUsers();
     }, [getUsers]);
@@ -172,7 +170,9 @@ const CreateAssignment = ({ getUsers, setSelectedUsers, user: { users, loading, 
                         />
                     </Paper>
                 </div>
-                <button className='btn-next' onClick={onNextButtonClick}>Next</button>
+                <Link to='/edit_assignment_info'>
+                    <button className='btn-next' disabled={idsSelected.length === 0} onClick={onNextButtonClick}>Next</button>
+                </Link>
             </Fragment>
         );
 };
