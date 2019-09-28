@@ -37,7 +37,7 @@ const assignments = [
   }
 ];
 
-const InstructorDashboard = ({ logout, assigns }) => {
+const InstructorDashboard = ({logout, assigns}) => {
   const todoItems = assignments.filter(a => a.status !== 'Submitted').sort((a, b) => {
     return a.statusDate - b.statusDate;
   }).map(a => {
