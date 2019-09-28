@@ -9,3 +9,6 @@ export const FORM_SWITCH = 'FORM_SWITCH';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT = 'LOGOUT';
+export const GET_USERS = 'GET_USERS';
+export const USERS_ERROR = 'USERS_ERROR';
+export const SET_SELECTED_USERS = 'SET_SELECTED_USERS';
