@@ -4,8 +4,9 @@ import Navbar from '../layout/Navbar'
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { createNewAssigment } from '../../actions/assignment';
 import { DatePicker } from "@material-ui/pickers";
-const AssignmentInfoForm = ({ selectedUsers, names }) => {
+const AssignmentInfoForm = ({ createNewAssigment, selectedUsers, names }) => {
     const useStyles = makeStyles(theme => ({
         container: {
             display: 'flex',
@@ -37,17 +38,21 @@ const AssignmentInfoForm = ({ selectedUsers, names }) => {
             ...assigmentFormData,
             [e.target.name]: e.target.value
         });
-    const [selectedDate, handleDateChange] = useState(new Date());
+    const [selectedDate, handleDateChange] = useState(null);
     const items = names.map(a => {
         return (
             <li key={a} className="instructor-item">{a}</li>
         )
     });
+    const onSubmit = async e => {
+        e.preventDefault();
+        await createNewAssigment(name, detail_info, selectedUsers, selectedDate);
+    };
     return (
         <div>
             <Navbar />
             <Fragment>
-                <form className='form-b' >
+                <form className='form-b' onSubmit={e => onSubmit(e)}>
                     <p className='lead'>
                         <i className='fas fa-book'></i> New Assignment
                                 </p>
@@ -80,9 +85,9 @@ const AssignmentInfoForm = ({ selectedUsers, names }) => {
                         {items}
                     </ul>
                     <div className="picker">
-                        <DatePicker value={selectedDate} onChange={handleDateChange} />
+                        <DatePicker label="Due date" value={selectedDate} onChange={handleDateChange} />
                     </div>
-                    <button className='btn-next' >Submit</button>
+                    <button className='btn-next' disabled={name.length === 0 || detail_info.length === 0 || selectedDate === null} >Submit</button>
                 </form>
             </Fragment>
 
@@ -93,6 +98,7 @@ const AssignmentInfoForm = ({ selectedUsers, names }) => {
 AssignmentInfoForm.propTypes = {
     selectedUsers: PropTypes.array.isRequired,
     names: PropTypes.array.isRequired,
+    createNewAssigment: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -101,5 +107,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
     mapStateToProps,
-    {}
+    { createNewAssigment }
 )(AssignmentInfoForm);

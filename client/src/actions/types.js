@@ -12,3 +12,5 @@ export const LOGOUT = 'LOGOUT';
 export const GET_USERS = 'GET_USERS';
 export const USERS_ERROR = 'USERS_ERROR';
 export const SET_SELECTED_USERS = 'SET_SELECTED_USERS';
+export const ADD_SUCCESS = 'ADD_SUCCESS';
+export const ADD_FAIL = 'ADD_FAIL';

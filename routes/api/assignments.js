@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Assigment = require('../../models/Assigment');
+const Assigment = require('../../models/Assignment');
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
@@ -53,3 +53,5 @@ router.post(
         }
     }
 );
+
+module.exports = router;
