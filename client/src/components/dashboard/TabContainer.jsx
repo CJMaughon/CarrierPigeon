@@ -33,7 +33,7 @@ export default class TabContainer extends React.Component {
                     {btns}
                 </div>
                 <div className="tab-content">
-                    {tabs}
+                    <ul>{tabs}</ul>
                 </div>
             </div>
         )

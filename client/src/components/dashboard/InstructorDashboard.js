@@ -52,9 +52,19 @@ const InstructorDashboard = ({ logout, assigns }) => {
       <li key={a.name} className="assignment-item"><Assignment {...a} /></li>
     )
   });
-  const headers = ['To Do', 'History'];
-  const contents = [<ul>{todoItems}</ul>, <ul>{historyItems}</ul>];
-  const tabs = <TabContainer headers={headers} content={contents} />
+  //const headers = ['To Do', 'History'];
+  const tabStuff = [
+    {
+      header: 'To Do',
+      content: todoItems
+    },
+    {
+      header: 'History',
+      content: historyItems
+    }
+  ];
+  //const contents = [<ul>{todoItems}</ul>, <ul>{historyItems}</ul>];
+  const tabs = <TabContainer headers={tabStuff.map(t => t.header)} content={tabStuff.map(t => t.content)} />
   return (
     <section className='landing'>
       <div className='dark-overlay'>
