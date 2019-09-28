@@ -38,11 +38,11 @@ const AssignmentInfoForm = ({ selectedUsers, names }) => {
             [e.target.name]: e.target.value
         });
     const [selectedDate, handleDateChange] = useState(new Date());
-    // const items = assignments.map(a => {
-    //     return (
-    //         <li key={a.name} className="assignment-item"><Assignment {...a} /></li>
-    //     )
-    // });
+    const items = names.map(a => {
+        return (
+            <li key={a} className="instructor-item">{a}</li>
+        )
+    });
     return (
         <div>
             <Navbar />
@@ -75,7 +75,10 @@ const AssignmentInfoForm = ({ selectedUsers, names }) => {
                         margin="normal"
                         variant="filled"
                     />
-
+                    <p className='lead'>Assigned Instructors</p>
+                    <ul>
+                        {items}
+                    </ul>
                     <div className="picker">
                         <DatePicker value={selectedDate} onChange={handleDateChange} />
                     </div>

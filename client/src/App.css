@@ -667,3 +667,8 @@ body {
 .picker {
   margin: 30px;
 }
+
+.instructor-item {
+  color: #4caf50;
+  font-family: 'Roboto', sans-serif, bold;
+}
