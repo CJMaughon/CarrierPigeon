@@ -1,10 +1,11 @@
 import {
     ADD_SUCCESS,
     ADD_FAIL,
+    GET_ASSIGNMENTS
 } from '../actions/types';
 
 const initialState = {
-
+    assignments: [],
 };
 
 export default function (state = initialState, action) {
@@ -14,6 +15,12 @@ export default function (state = initialState, action) {
         case ADD_SUCCESS:
             return {
                 ...state
+            };
+        case GET_ASSIGNMENTS:
+            return {
+                ...state,
+                assignments: payload,
+                loading: false,
             };
         case ADD_FAIL:
             return {

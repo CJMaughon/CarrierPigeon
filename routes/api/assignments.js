@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Assigment = require('../../models/Assignment');
+const Assignment = require('../../models/Assignment');
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs');
 const auth = require('../../middleware/auth');
 
 // @route 	POST api/assignments
-// @desc	Route to create new assigments
+// @desc	Route to create new assignments
 // @access 	Public
 router.post(
     '/', auth,
@@ -34,7 +34,7 @@ router.post(
         const { name, detail, instructors, dueDate } = req.body;
         try {
 
-            assignment = new Assigment({
+            assignment = new Assignment({
                 name,
                 detail,
                 instructors,
@@ -53,5 +53,18 @@ router.post(
         }
     }
 );
+
+
+// @route 	GET api/assignments
+// @access 	Public
+router.get('/', auth, async (req, res) => {
+    try {
+        const assignments = await Assignment.find().sort({ date: -1 });
+        res.json(assignments);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 module.exports = router;

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {
     ADD_FAIL,
-    ADD_SUCCESS
+    ADD_SUCCESS,
+    GET_ASSIGNMENTS
 } from './types';
 
 // Add new assigment 
@@ -37,6 +38,22 @@ export const createNewAssigment = (
         }
         dispatch({
             type: ADD_FAIL
+        });
+    }
+};
+
+// Get posts
+export const getAssignments = () => async dispatch => {
+    try {
+        const res = await axios.get('/api/assignments');
+        dispatch({
+            type: GET_ASSIGNMENTS,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: ADD_FAIL,
+            payload: { msg: err.response.statusText, status: err.response.status }
         });
     }
 };
