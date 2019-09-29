@@ -17,8 +17,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Link } from 'react-router-dom';
-const CreateAssignment = ({ getUnapprovedUsers, approveUsers, user: { users, loading } }) => {
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading } }) => {
 
     useEffect(() => {
         getUnapprovedUsers();
@@ -31,6 +33,16 @@ const CreateAssignment = ({ getUnapprovedUsers, approveUsers, user: { users, loa
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        window.location.href = "./approve_user"
+    }
     const handleRequestSort = (event, property) => {
         const isDesc = orderBy === property && order === 'desc';
         setOrder(isDesc ? 'asc' : 'desc');
@@ -89,7 +101,11 @@ const CreateAssignment = ({ getUnapprovedUsers, approveUsers, user: { users, loa
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
-    const onNextButtonClick = e => approveUsers(idsSelected);
+    const onNextButtonClick = async e => {
+        e.preventDefault();
+        await approveUsers(idsSelected);
+        handleOpen();
+    }
     return loading ? (
         <Spinner />
     ) : (
@@ -170,9 +186,27 @@ const CreateAssignment = ({ getUnapprovedUsers, approveUsers, user: { users, loa
                         />
                     </Paper>
                 </div>
-                <Link to='/admin_dashboard'>
-                    <button className='btn-next' disabled={idsSelected.length === 0} onClick={onNextButtonClick}>Approve</button>
-                </Link>
+                <button className='btn-next' disabled={idsSelected.length === 0} onClick={onNextButtonClick}>Approve</button>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={open}>
+                        <div className={classes.modalPaper}>
+                            <p className='lead'>
+                                <i className='fas fa-check'></i> User Approved.
+                                </p>
+                        </div>
+                    </Fade>
+                </Modal>
             </Fragment>
         );
 };
@@ -343,10 +377,21 @@ const useStyles = makeStyles(theme => ({
         top: 20,
         width: 1,
     },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modalPaper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
 }));
 
 
-CreateAssignment.propTypes = {
+UserApprove.propTypes = {
     user: PropTypes.object.isRequired,
     getUnapprovedUsers: PropTypes.func.isRequired,
     approveUsers: PropTypes.func.isRequired,
@@ -358,4 +403,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { getUnapprovedUsers, approveUsers }
-)(CreateAssignment);
+)(UserApprove);

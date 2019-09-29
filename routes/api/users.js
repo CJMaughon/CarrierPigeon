@@ -42,7 +42,7 @@ router.post(
           .json({ errors: [{ msg: 'User already exists' }] });
       }
       const isInstructor = true;
-      const isUserApproved = true;
+      const isUserApproved = false;
       user = new User({
         name,
         email,

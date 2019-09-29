@@ -19,6 +19,7 @@
     "url": "https://github.com/CJMaughon/CarrierPigeon/issues"
   },
   "dependencies": {
+    "@material-ui/pickers": "^3.2.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "concurrently": "^3.6.1",
