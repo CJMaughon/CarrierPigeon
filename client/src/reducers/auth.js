@@ -77,6 +77,8 @@ export default function (state = initialState, action) {
         ...state,
         token: null,
         isAuthenticated: false,
+        isInstructor: null,
+        isUserApproved: null,
         loading: false
       };
     default:
