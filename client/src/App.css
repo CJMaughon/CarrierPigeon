@@ -55,6 +55,12 @@ img {
   color: #21bff5;
 }
 
+.error-text {
+  font-size: 1rem;
+  margin-top: 1rem;
+  color: #fa0b0b;
+}
+
 .text-center {
   text-align: center;
 }

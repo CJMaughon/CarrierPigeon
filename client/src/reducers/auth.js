@@ -4,17 +4,24 @@ import {
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAIL
+  LOGIN_FAIL,
+  LOGOUT,
+  INPUT_ERROR,
+  FORM_SWITCH
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
+  isInstructor: null,
+  isUserApproved: null,
+  isLoginFormVisible: true,
+  error: null,
   loading: true,
   user: null
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -23,9 +30,29 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload
+        user: payload,
+        isInstructor: payload.isInstructor,
+        isUserApproved: payload.isUserApproved
+
+      };
+    case INPUT_ERROR:
+      return {
+        ...state,
+        error: payload
+      };
+    case FORM_SWITCH:
+      return {
+        ...state,
+        isLoginFormVisible: payload
       };
     case REGISTER_SUCCESS:
+      return {
+        ...state,
+        ...payload,
+        isAuthenticated: false,
+        isLoginFormVisible: true,
+        loading: false
+      };
     case LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token);
       return {
@@ -35,8 +62,17 @@ export default function(state = initialState, action) {
         loading: false
       };
     case REGISTER_FAIL:
+      localStorage.removeItem('token');
+      return {
+        ...state,
+        token: null,
+        hasError: true,
+        isAuthenticated: false,
+        loading: false
+      };
     case AUTH_ERROR:
     case LOGIN_FAIL:
+    case LOGOUT:
       localStorage.removeItem('token');
       return {
         ...state,

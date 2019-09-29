@@ -1,0 +1,26 @@
+.tab-header {
+    background-color: #21a0b6;
+    padding: 10px;
+    border: 1px solid white;
+    color: white;
+    margin: 0;
+    border-bottom: 0;
+}
+
+.tab-header:hover {
+    background-color: steelblue;
+    color: white;
+    cursor: pointer;
+}
+
+.tab-header
+.tab-header:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.tab-header:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    
+}

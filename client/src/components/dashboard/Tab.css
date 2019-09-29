@@ -1,0 +1,7 @@
+.dash-tab.dash-tab-shown {
+    display: inherit;
+}
+
+.dash-tab {
+    display: none;
+}

@@ -21,9 +21,6 @@ router.post(
     check('location', 'Location is required')
       .not()
       .isEmpty(),
-    check('type', 'Type is required')
-      .not()
-      .isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
     check(
       'password',
@@ -35,25 +32,26 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password, mobile, location, type } = req.body;
-
+    const { name, email, password, mobile, location } = req.body;
     try {
       // See if user exists
       let user = await User.findOne({ email });
-
       if (user) {
         return res
           .status(400)
           .json({ errors: [{ msg: 'User already exists' }] });
       }
-
+      const isInstructor = true;
+      const isUserApproved = true;
       user = new User({
         name,
         email,
         password,
         mobile,
         location,
-        type
+        isInstructor,
+        isUserApproved
+
       });
 
       // Encrypt password

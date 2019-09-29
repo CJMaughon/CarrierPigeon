@@ -3,15 +3,32 @@ import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
-import { login } from '../../actions/auth';
+import { register, setError, login, switchForm } from '../../actions/auth';
+import Error from './Alert';
 import PropTypes from 'prop-types';
-const Landing = ({ setAlert, register, login, isAuthenticated }) => {
+const Landing = ({
+  switchForm,
+  isLoginFormVisible,
+  setError,
+  register,
+  login,
+  isAuthenticated,
+  isInstructor,
+  isUserApproved
+}) => {
   if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
+    if (isUserApproved === false) {
+      return <Redirect to='/unapproved_page' />;
+    }
+    if (isInstructor === true) {
+      return <Redirect to='/instructor_dashboard' />;
+
+    }
+    if (isInstructor === false) {
+      return <Redirect to='/admin_dashboard' />;
+    }
+
   }
-  const [isLoginVisible, setIsLoginVisible] = useState(true);
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
     email: '',
@@ -20,7 +37,6 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
     password: '',
     password2: ''
   });
-  const type = 'Instructor';
 
   const [loginFormData, setLoginFormData] = useState({
     loginEmail: '',
@@ -35,7 +51,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
     location,
     password2
   } = registerFormData;
-  const onSwitchFormButtonClick = e => setIsLoginVisible(!isLoginVisible);
+  const onSwitchFormButtonClick = e => switchForm(!isLoginFormVisible);
   const onSignUpFormChange = e =>
     setRegisterFormData({
       ...registerFormData,
@@ -45,9 +61,9 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
   const onSubmitRegister = async e => {
     e.preventDefault();
     if (password !== password2) {
-      setAlert('Passwords do not match', 'danger');
+      setError('Passwords do not match');
     } else {
-      register({ name, email, password, mobile, location, type });
+      await register(name, email, password, mobile, location);
     }
   };
 
@@ -58,7 +74,6 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
     });
   const onSubmitLogin = async e => {
     e.preventDefault();
-    console.log(loginEmail, loginPassword);
     login(loginEmail, loginPassword);
   };
 
@@ -83,8 +98,10 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
             value={loginPassword}
             onChange={e => onLogInFormChange(e)}
             name='loginPassword'
+            minLength='6'
           />
           <button>Login</button>
+          <Error></Error>
         </form>
         <div className='sign-up-text'>
           <p>Don't have an account?</p>
@@ -95,7 +112,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
       </div>
     </div>
   );
-  if (!isLoginVisible) {
+  if (!isLoginFormVisible) {
     form = (
       <div className='login-form-container'>
         <div>
@@ -141,6 +158,7 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
               value={password}
               onChange={e => onSignUpFormChange(e)}
               name='password'
+              minLength='6'
             />
             <input
               type='password'
@@ -148,8 +166,10 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
               value={password2}
               onChange={e => onSignUpFormChange(e)}
               name='password2'
+              minLength='6'
             />
             <button>Submit</button>
+            <Error></Error>
           </form>
           <div className='sign-up-text'>
             <p>Already have an account?</p>
@@ -177,17 +197,24 @@ const Landing = ({ setAlert, register, login, isAuthenticated }) => {
 };
 
 Landing.propTypes = {
-  setAlert: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+  switchForm: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  isInstructor: PropTypes.bool,
+  isUserApproved: PropTypes.bool,
+  isLoginFormVisible: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  isInstructor: state.auth.isInstructor,
+  isUserApproved: state.auth.isUserApproved,
+  isLoginFormVisible: state.auth.isLoginFormVisible
 });
 
 export default connect(
   mapStateToProps,
-  { setAlert, register, login }
+  { setError, register, login, switchForm }
 )(Landing);
