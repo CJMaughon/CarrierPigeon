@@ -102,7 +102,11 @@ const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading 
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
-    const onNextButtonClick = e => approveUsers(idsSelected);
+    const onNextButtonClick = async e => {
+        e.preventDefault();
+        await approveUsers(idsSelected);
+        handleOpen();
+    }
     return loading ? (
         <Spinner />
     ) : (
