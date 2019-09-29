@@ -9,7 +9,7 @@ import {
 export const createNewAssigment = (
     name,
     detail,
-    instructors,
+    assignedInstructors,
     dueDate,
 ) => async dispatch => {
     const config = {
@@ -20,7 +20,7 @@ export const createNewAssigment = (
     const body = JSON.stringify({
         name,
         detail,
-        instructors,
+        assignedInstructors,
         dueDate,
     });
     try {
