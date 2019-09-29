@@ -46,7 +46,7 @@ const AssignmentInfoForm = ({ createNewAssigment, selectedUsers, names }) => {
 
     const handleClose = () => {
         setOpen(false);
-        window.location.href = "/admin_dashboard"
+        window.location.href = "./admin_dashboard"
     }
 
     const [assigmentFormData, setAssignmentFormData] = useState({

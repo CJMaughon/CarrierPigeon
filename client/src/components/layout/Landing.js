@@ -97,6 +97,14 @@ const Landing = ({
     } else {
       await register(name, email, password, mobile, location);
       handleOpen();
+      setRegisterFormData({
+        name: '',
+        email: '',
+        mobile: '',
+        location: '',
+        password: '',
+        password2: ''
+      });
     }
   };
 

@@ -17,7 +17,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Link } from 'react-router-dom';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -42,7 +41,7 @@ const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading 
 
     const handleClose = () => {
         setOpen(false);
-        window.location.href = "/admin_dashboard"
+        window.location.href = "./approve_user"
     }
     const handleRequestSort = (event, property) => {
         const isDesc = orderBy === property && order === 'desc';
@@ -187,29 +186,27 @@ const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading 
                         />
                     </Paper>
                 </div>
-                <Link to='/admin_dashboard'>
-                    <button className='btn-next' disabled={idsSelected.length === 0} onClick={onNextButtonClick}>Approve</button>
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        className={classes.modal}
-                        open={open}
-                        onClose={handleClose}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            timeout: 500,
-                        }}
-                    >
-                        <Fade in={open}>
-                            <div className={classes.modalPaper}>
-                                <p className='lead'>
-                                    <i className='fas fa-check'></i> User Approved.
+                <button className='btn-next' disabled={idsSelected.length === 0} onClick={onNextButtonClick}>Approve</button>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={open}>
+                        <div className={classes.modalPaper}>
+                            <p className='lead'>
+                                <i className='fas fa-check'></i> User Approved.
                                 </p>
-                            </div>
-                        </Fade>
-                    </Modal>
-                </Link>
+                        </div>
+                    </Fade>
+                </Modal>
             </Fragment>
         );
 };
