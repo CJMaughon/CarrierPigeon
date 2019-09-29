@@ -36,17 +36,17 @@ drive.files.list({
 
 
 
-// // Connect Database
-// connectDB();
+// Connect Database
+connectDB();
 
-// app.get('/', (req, res) => res.send('API running'));
+app.get('/', (req, res) => res.send('API running'));
 
-// // Init Middleware
-// app.use(express.json({ extended: false }));
+// Init Middleware
+app.use(express.json({ extended: false }));
 
-// app.use('/api/users', require('./routes/api/users'));
-// app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
 
-// const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
-// app.listen(PORT, () => console.log(`Server started on Port ${PORT}`));
+app.listen(PORT, () => console.log(`Server started on Port ${PORT}`));
