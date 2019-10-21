@@ -1,18 +1,24 @@
+const express = require('express');
+const router = express.Router();
+const User = require('../../models/User');
+const { check, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const bcrypt = require('bcryptjs');
+
 const { google } = require('googleapis');
-
 const credentials = require('./credentials.json');
-
 const scopes = [
     'https://www.googleapis.com/auth/drive'
   ];
-  
 const auth = new google.auth.JWT(
     credentials.client_email, null,
     credentials.private_key, scopes
 );
-
 const drive = google.drive({version: 'v3', auth});
 const fs = require('fs');
+
+router.get()
 
 // const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9';
 // //upload
