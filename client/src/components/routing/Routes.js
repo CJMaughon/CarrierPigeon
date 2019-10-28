@@ -14,10 +14,10 @@ const Routes = () => {
     <section className='container'>
       <Switch>
         <Route exact path='/' component={Landing} />
-        <Route exact path='/admin_dashboard' component={AdminDashboard} />
-        <Route exact path='/approve_user' component={UserApproveForm} />
-        <Route exact path='/create_assignment' component={CreateAssignment} />
-        <Route exact path='/edit_assignment_info' component={AssignmentInfoForm} />
+        <PrivateRoute exact path='/admin_dashboard' component={AdminDashboard} />
+        <PrivateRoute exact path='/approve_user' component={UserApproveForm} />
+        <PrivateRoute exact path='/create_assignment' component={CreateAssignment} />
+        <PrivateRoute exact path='/edit_assignment_info' component={AssignmentInfoForm} />
         <PrivateRoute exact path='/instructor_dashboard' component={InstructorDashboard} />
         <PrivateRoute exact path='/unapproved_page' component={UnapprovedUserPage} />
         <Route component={NotFound} />

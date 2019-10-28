@@ -11,7 +11,7 @@ const auth = require('../../middleware/auth');
 // @desc	Route to create new assignments
 // @access 	Public
 router.post(
-    '/',
+    '/', auth,
     [
         check('name', 'Name is required')
             .not()
@@ -40,7 +40,6 @@ router.post(
                 dueDate,
             });
             await assignment.save();
-            // Return jsonwebtoken
             const payload = {
                 assignment: {
                     id: assignment._id
@@ -57,7 +56,7 @@ router.post(
 
 // @route 	GET api/assignments
 // @access 	Public
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
         const assignments = await Assignment.find().sort({ date: -1 });
         res.json(assignments);
