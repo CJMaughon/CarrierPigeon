@@ -577,6 +577,7 @@ img {
 }
 .btn-next:disabled {
   background: gray;
+  cursor: not-allowed;
 }
 .form-a .message {
   margin: 15px 0 0;
