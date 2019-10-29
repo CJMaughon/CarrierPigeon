@@ -18,6 +18,7 @@ const auth = new google.auth.JWT(
 );
 const drive = google.drive({version: 'v3', auth});
 const fs = require('fs');
+const async = require('async');
 
 // const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9';
 // //upload
@@ -79,30 +80,24 @@ const fs = require('fs');
 // @access   Public
 router.get('/', appAuth, async (req, res) => {
 
-  drive.files.list({
-    q: "mimeType = 'application/vnd.google-apps.folder'",
-    pageSize: 15,
-    fields: 'nextPageToken, files(id, name)',
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const files = res.data.files;
-    if (files.length) {
-      console.log('Files:');
-      files.map((file) => {
-        console.log(`${file.name} (${file.id})`);
-      });
-    } else {
-      console.log('No files found.');
-    }
-  });
-
     try {
-      let test = "test";
-      res.send(test);
+      getFolders().then((response) => {
+      res.send(response.data.files.map((file) => {
+      return {name: file.name};
+    }));
+  });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
+});
+
+function getFolders(){
+  return drive.files.list({
+    q: "mimeType = 'application/vnd.google-apps.folder'",
+    pageSize: 15,
+    fields: 'nextPageToken, files(id, name)',
   });
+}
 
 module.exports = router;
