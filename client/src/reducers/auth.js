@@ -50,7 +50,6 @@ export default function (state = initialState, action) {
         ...state,
         ...payload,
         isAuthenticated: false,
-        isLoginFormVisible: true,
         loading: false
       };
     case LOGIN_SUCCESS:
@@ -78,6 +77,8 @@ export default function (state = initialState, action) {
         ...state,
         token: null,
         isAuthenticated: false,
+        isInstructor: null,
+        isUserApproved: null,
         loading: false
       };
     default:
