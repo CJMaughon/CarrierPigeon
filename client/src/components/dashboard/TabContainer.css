@@ -1,16 +1,20 @@
 .tab-header {
-    background-color: #21a0b6;
-    padding: 10px;
-    border: 1px solid white;
+    height: 4em;
+    width: 25%;
+    padding: 1.5em auto;
+    margin: 1em 0.5em;
+    background-color: #FEB1C0;
+    border: none;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+    transition: all 0.2s cubic-bezier(.4,0,.2,1);    
     color: white;
-    margin: 0;
-    border-bottom: 0;
 }
 
 .tab-header:hover {
-    background-color: steelblue;
-    color: white;
-    cursor: pointer;
+    letter-spacing: 0.8em;
+    background-color: #F08C99;
 }
 
 .tab-header

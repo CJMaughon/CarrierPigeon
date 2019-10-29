@@ -12,7 +12,7 @@ const assignments = [
     statusDate: new Date(2019, 6, 25)
   },
   {
-    id: 1, 
+    id: 1,
     name: 'Task 2',
     status: 'Submitted',
     statusDate: new Date(2019, 7, 25)
@@ -37,7 +37,7 @@ const assignments = [
   }
 ];
 
-const InstructorDashboard = ({logout, assigns}) => {
+const InstructorDashboard = ({ logout, assigns }) => {
   const todoItems = assignments.filter(a => a.status !== 'Submitted').sort((a, b) => {
     return a.statusDate - b.statusDate;
   }).map(a => {
@@ -67,12 +67,10 @@ const InstructorDashboard = ({logout, assigns}) => {
   const tabs = <TabContainer headers={tabStuff.map(t => t.header)} content={tabStuff.map(t => t.content)} />
   return (
     <section className='landing'>
-      <div className='dark-overlay'>
-        <div className='landing-inner'>
-          <h1 className='large'>Instructor Dashboard</h1>
-          {tabs}
-          <button className='tab-header' onClick={logout}>LOG OUT</button>
-        </div>
+      <div className='instructor-landing-inner'>
+        <h1 className='large'>Instructor Dashboard</h1>
+        {tabs}
+        <button className='tab-header' onClick={logout}>LOG OUT</button>
       </div>
     </section>
   );

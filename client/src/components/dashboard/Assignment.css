@@ -4,12 +4,13 @@
     min-width: 33vw;
     justify-content: center;
     align-items: center;
-    border: 1px solid white;
     border-radius: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
+    background: rgba(256, 256, 256, 0.7);
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.5);
 }
 
 .assignment-record:hover {
