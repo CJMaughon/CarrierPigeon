@@ -83,7 +83,7 @@ router.get('/', appAuth, async (req, res) => {
     try {
       getFolders().then((response) => {
       res.send(response.data.files.map((file) => {
-      return {name: file.name};
+      return file.name;
     }));
   });
     } catch (err) {
