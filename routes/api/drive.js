@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../../models/User');
-const auth = require('../../middleware/auth');
+const appAuth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
@@ -12,7 +12,7 @@ const credentials = require('../../credentials.json');
 const scopes = [
     'https://www.googleapis.com/auth/drive'
   ];
-const driveAuth = new google.auth.JWT(
+const auth = new google.auth.JWT(
     credentials.client_email, null,
     credentials.private_key, scopes
 );
@@ -77,7 +77,25 @@ const fs = require('fs');
 // @route    GET api/auth
 // @desc     Test route
 // @access   Public
-router.get('/', auth, async (req, res) => {
+router.get('/', appAuth, async (req, res) => {
+
+  drive.files.list({
+    q: "mimeType = 'application/vnd.google-apps.folder'",
+    pageSize: 15,
+    fields: 'nextPageToken, files(id, name)',
+  }, (err, res) => {
+    if (err) return console.log('The API returned an error: ' + err);
+    const files = res.data.files;
+    if (files.length) {
+      console.log('Files:');
+      files.map((file) => {
+        console.log(`${file.name} (${file.id})`);
+      });
+    } else {
+      console.log('No files found.');
+    }
+  });
+
     try {
       let test = "test";
       res.send(test);
