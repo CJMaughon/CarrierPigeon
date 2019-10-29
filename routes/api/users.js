@@ -5,9 +5,9 @@ const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
-
+const auth = require('../../middleware/auth');
 // @route 	POST api/users
-// @desc	Test route
+// @desc	Route to create new users
 // @access 	Public
 router.post(
   '/',
@@ -42,7 +42,7 @@ router.post(
           .json({ errors: [{ msg: 'User already exists' }] });
       }
       const isInstructor = true;
-      const isUserApproved = true;
+      const isUserApproved = false;
       user = new User({
         name,
         email,
@@ -81,4 +81,44 @@ router.post(
     }
   }
 );
+
+// @route 	GET api/users/approved
+// @desc	Test route
+// @access 	Public
+router.get('/approved', auth, async (req, res) => {
+  try {
+    const users = await User.find({ isInstructor: { $eq: true }, isUserApproved: { $eq: true } }).sort({ date: -1 });
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route 	GET api/users/unapproved
+// @desc	Test route
+// @access 	Public
+router.get('/unapproved', auth, async (req, res) => {
+  try {
+    const users = await User.find({ isInstructor: { $eq: true }, isUserApproved: { $eq: false } }).sort({ date: -1 });
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route 	POST api/users/approve_user
+// @desc	Test route
+// @access 	Public
+router.post('/approve_user', auth, async (req, res) => {
+  try {
+
+    const users = await User.updateMany({ _id: { $in: req.body.selectedUsers } }, { $set: { isUserApproved: true } });
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 module.exports = router;
