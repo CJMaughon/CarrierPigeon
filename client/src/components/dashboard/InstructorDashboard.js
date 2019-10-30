@@ -15,24 +15,21 @@ const InstructorDashboard = ({ getInstructorAssignments, authLoading, assignment
   }, [user]);
 
   function getTab(assignmentItems) {
-    let todoItems = null, historyItems = null, tabs = null;
 
-    if (assignmentItems != null) {
-      todoItems = assignmentItems.filter(a => a.status !== 'Submitted').sort((a, b) => {
-        return a.dueDate - b.dueDate;
-      }).map(a => {
-        return (
-          <li key={a._id} className="assignment-item"><Assignment {...a} /></li>
-        )
-      });
-      historyItems = assignmentItems.filter(a => a.status === 'Submitted').sort((a, b) => {
-        return a.dueDate - b.dueDate;
-      }).map(a => {
-        return (
-          <li key={a._id} className="assignment-item"><Assignment {...a} /></li>
-        )
-      });
-    }
+    const todoItems = assignmentItems.filter(a => a.status !== 'Submitted').sort((a, b) => {
+      return a.dueDate - b.dueDate;
+    }).map(a => {
+      return (
+        <li key={a._id} className="assignment-item"><Assignment {...a} /></li>
+      )
+    });
+    const historyItems = assignmentItems.filter(a => a.status === 'Submitted').sort((a, b) => {
+      return a.dueDate - b.dueDate;
+    }).map(a => {
+      return (
+        <li key={a._id} className="assignment-item"><Assignment {...a} /></li>
+      )
+    });
     const tabStuff = [
       {
         header: 'To Do',
@@ -43,7 +40,7 @@ const InstructorDashboard = ({ getInstructorAssignments, authLoading, assignment
         content: historyItems
       }
     ];
-    tabs = <TabContainer headers={tabStuff.map(t => t.header)} content={tabStuff.map(t => t.content)} />
+    const tabs = <TabContainer headers={tabStuff.map(t => t.header)} content={tabStuff.map(t => t.content)} />
     return tabs;
   }
 

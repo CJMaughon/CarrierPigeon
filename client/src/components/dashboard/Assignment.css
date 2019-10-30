@@ -31,8 +31,12 @@
 }
 
 .assignment-name > p:first-child  {
+    font-family: 'Rooney';
     font-size: 120%;
     text-align: left;
+}
+.fa {
+    padding-right: 5px;
 }
 .assignment-status {
     display:inline-block;

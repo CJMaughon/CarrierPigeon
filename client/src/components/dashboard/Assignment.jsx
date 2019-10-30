@@ -16,7 +16,7 @@ const Assignment = ({ name, status, dueDate }) => {
                         {status}
                     </div>
                     <div className="assignment-date">
-                        {formatDate(new Date(dueDate))}
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>{formatDate(new Date(dueDate))}
                     </div>
                 </div>
             </div>

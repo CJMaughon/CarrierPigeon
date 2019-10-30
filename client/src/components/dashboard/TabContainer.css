@@ -1,6 +1,7 @@
+
 .tab-header {
     height: 4em;
-    width: 25%;
+    width: 10em;
     padding: 1.5em auto;
     margin: 1em 0.5em;
     background-color: #B1E5FE;
@@ -17,7 +18,6 @@
     background-color: #8CF0D1;
 }
 
-.tab-header
 .tab-header:first-child {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
