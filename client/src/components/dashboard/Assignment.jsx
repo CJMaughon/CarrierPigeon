@@ -5,8 +5,8 @@ const formatDate = date => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() + 1900}`;
 }
 
-const Assignment = ({ name, status, statusDate }) => {
-    // TODO: Translate date?
+const Assignment = ({ name, status, dueDate }) => {
+    console.log(dueDate);
     return (
         <div className="assignment-record">
             <div className="assignment-name">
@@ -16,7 +16,7 @@ const Assignment = ({ name, status, statusDate }) => {
                         {status}
                     </div>
                     <div className="assignment-date">
-                        {formatDate(statusDate)}
+                        {formatDate(new Date(dueDate))}
                     </div>
                 </div>
             </div>

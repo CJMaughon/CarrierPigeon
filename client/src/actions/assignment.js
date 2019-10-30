@@ -42,10 +42,27 @@ export const createNewAssigment = (
     }
 };
 
-// Get posts
+// Get assigments
 export const getAssignments = () => async dispatch => {
     try {
         const res = await axios.get('/api/assignments');
+        dispatch({
+            type: GET_ASSIGNMENTS,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: ADD_FAIL,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+
+// Get Instructor Assignments
+export const getInstructorAssignments = (userId) => async dispatch => {
+    try {
+        const url = '/api/assignments/' + userId;
+        const res = await axios.get(url);
         dispatch({
             type: GET_ASSIGNMENTS,
             payload: res.data

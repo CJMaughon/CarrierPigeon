@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Assignment = require('../../models/Assignment');
 const { check, validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
-const config = require('config');
-const bcrypt = require('bcryptjs');
 const auth = require('../../middleware/auth');
 
 // @route 	POST api/assignments
@@ -67,4 +64,41 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
+
+// @route 	GET api/assignments
+// @access 	Public
+router.get('/', auth, async (req, res) => {
+    try {
+        const assignments = await Assignment.find().sort({ date: -1 });
+        res.json(assignments);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route 	GET api/assignments
+// @access 	Public
+router.get('/:id', auth, async (req, res) => {
+    const userId = req.params.id;
+    try {
+        let assignments = await Assignment.find({ assignedInstructors: userId }).sort({ date: -1 });
+        assignments.map((assignment) => {
+            const today = new Date();
+            if (assignment.isSubmitted) {
+                assignment.status = "submitted";
+            }
+            else {
+                if (today >= assignment.dueDate) {
+                    assignment.status = "overdue";
+                }
+            }
+        });
+        res.json(assignments);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 module.exports = router;
+

@@ -19,6 +19,10 @@ const AssignmentSchema = new Schema({
         type: Boolean,
         default: false
     },
+    status: {
+        type: String,
+        default: "upcoming"
+    },
     dueDate: {
         type: Date,
         required: true

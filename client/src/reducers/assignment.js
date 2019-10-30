@@ -6,6 +6,7 @@ import {
 
 const initialState = {
     assignments: [],
+    loadingAssignment: true
 };
 
 export default function (state = initialState, action) {
@@ -20,7 +21,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 assignments: payload,
-                loading: false,
+                loadingAssignment: false,
             };
         case ADD_FAIL:
             return {
