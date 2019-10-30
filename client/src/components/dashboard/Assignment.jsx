@@ -6,7 +6,6 @@ const formatDate = date => {
 }
 
 const Assignment = ({ name, status, dueDate }) => {
-    console.log(dueDate);
     return (
         <div className="assignment-record">
             <div className="assignment-name">
@@ -16,7 +15,7 @@ const Assignment = ({ name, status, dueDate }) => {
                         {status}
                     </div>
                     <div className="assignment-date">
-                        <i class="fa fa-clock-o" aria-hidden="true"></i>{formatDate(new Date(dueDate))}
+                        <i className="fa fa-clock-o" aria-hidden="true"></i>{formatDate(new Date(dueDate))}
                     </div>
                 </div>
             </div>
