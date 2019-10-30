@@ -15,6 +15,10 @@ const AssignmentSchema = new Schema({
         type: [String],
         required: true
     }],
+    isSubmitted: {
+        type: Boolean,
+        default: false
+    },
     dueDate: {
         type: Date,
         required: true
