@@ -3,7 +3,7 @@
     width: 25%;
     padding: 1.5em auto;
     margin: 1em 0.5em;
-    background-color: #FEB1C0;
+    background-color: #B1E5FE;
     border: none;
     border-radius: 3px;
     text-transform: uppercase;
@@ -14,7 +14,7 @@
 
 .tab-header:hover {
     letter-spacing: 0.8em;
-    background-color: #F08C99;
+    background-color: #8CF0D1;
 }
 
 .tab-header
@@ -26,5 +26,8 @@
 .tab-header:last-child {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    
+}
+
+.tab-header-selected {
+    background-color: #8CF0D1;
 }

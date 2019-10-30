@@ -14,7 +14,7 @@
 }
 
 .assignment-record:hover {
-    background-color: black;
+    background-color: #8CF0D1;
     cursor: pointer;
 }
 
@@ -28,4 +28,30 @@
     margin-left: auto;
     font-size: 300%;
     cursor: pointer;
+}
+
+.assignment-name > p:first-child  {
+    font-size: 120%;
+    text-align: left;
+}
+.assignment-status {
+    display:inline-block;
+    padding-right: 30px;
+    text-transform: uppercase;
+}
+.assignment-date {
+    display:inline-block;
+}
+
+.status-overdue {
+    color: red;
+    font-weight: bold;
+}
+
+.status-upcoming {
+    color: #0BEC0D;
+}
+.status-submitted {
+    color: #0B2AEC;
+    font-weight: bold;
 }

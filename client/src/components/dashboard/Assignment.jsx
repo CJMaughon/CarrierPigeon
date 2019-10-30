@@ -9,14 +9,21 @@ const Assignment = ({ name, status, statusDate }) => {
     // TODO: Translate date?
     return (
         <div className="assignment-record">
-            <p>{name}</p>
-            <div className="assignment-status">
-                <p>{status}</p>
-                <p>{formatDate(statusDate)}</p>
+            <div className="assignment-name">
+                <p>{name}</p>
+                <div>
+                    <div className={`assignment-status ${"status-" + status.toLowerCase()}`}>
+                        {status}
+                    </div>
+                    <div className="assignment-date">
+                        {formatDate(statusDate)}
+                    </div>
+                </div>
             </div>
             <p>&gt;</p>
-        </div>
+        </div >
     )
 }
+
 
 export default Assignment;

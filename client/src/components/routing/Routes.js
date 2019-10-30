@@ -15,14 +15,10 @@ const Routes = () => {
       <Switch>
         <Route exact path='/' component={Landing} />
         <PrivateRoute exact path='/admin_dashboard' component={AdminDashboard} />
-<<<<<<< HEAD
-        <Route exact path='/instructor_dashboard' component={InstructorDashboard} />
-=======
         <PrivateRoute exact path='/approve_user' component={UserApproveForm} />
         <PrivateRoute exact path='/create_assignment' component={CreateAssignment} />
         <PrivateRoute exact path='/edit_assignment_info' component={AssignmentInfoForm} />
         <PrivateRoute exact path='/instructor_dashboard' component={InstructorDashboard} />
->>>>>>> 258a442f7f45a3eb19cb678922a73d6fed0b0091
         <PrivateRoute exact path='/unapproved_page' component={UnapprovedUserPage} />
         <Route component={NotFound} />
       </Switch>
