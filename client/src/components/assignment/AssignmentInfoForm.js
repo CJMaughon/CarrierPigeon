@@ -5,11 +5,14 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { createNewAssigment } from '../../actions/assignment';
+import { setSelectedUsers } from '../../actions/users';
 import { DatePicker } from "@material-ui/pickers";
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-const AssignmentInfoForm = ({ createNewAssigment, selectedUsers, names }) => {
+import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
+const AssignmentInfoForm = ({ createNewAssigment, setSelectedUsers, selectedUsers, names }) => {
     const useStyles = makeStyles(theme => ({
         container: {
             display: 'flex',
@@ -35,6 +38,12 @@ const AssignmentInfoForm = ({ createNewAssigment, selectedUsers, names }) => {
             border: '2px solid #000',
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3),
+        },
+        margin: {
+            margin: theme.spacing(1),
+        },
+        marginIcon: {
+            marginLeft: theme.spacing(1),
         },
     }));
     const classes = useStyles();
@@ -64,9 +73,20 @@ const AssignmentInfoForm = ({ createNewAssigment, selectedUsers, names }) => {
             [e.target.name]: e.target.value
         });
     const [selectedDate, handleDateChange] = useState(null);
-    const items = names.map(a => {
+
+    const onUserDeleteButtonClick = e => {
+        const { id } = e.target;
+        let newSelectedUsers = selectedUsers.slice(0);
+        newSelectedUsers.splice(id, 1);
+        let newNames = names.slice(0);
+        newNames.splice(id, 1);
+        setSelectedUsers(newSelectedUsers, newNames);
+    }
+    const items = names.map((a, index) => {
         return (
-            <li key={a} className="instructor-item">{a}</li>
+            <Button id={index} variant="contained" size="small" key={a} color="primary" className={classes.margin}>
+                {a} <i id={index} className={`fas fa-times ${classes.marginIcon}`} onClick={onUserDeleteButtonClick}></i>
+            </Button>
         )
     });
     const onSubmit = async e => {
@@ -114,6 +134,9 @@ const AssignmentInfoForm = ({ createNewAssigment, selectedUsers, names }) => {
                         <DatePicker label="Due date" value={selectedDate} onChange={handleDateChange} />
                     </div>
                     <button className='btn-next' disabled={name.length === 0 || detail_info.length === 0 || selectedDate === null} >Submit</button>
+                    <Link to='/create_assignment'>
+                        <button className='btn-back'>Back</button>
+                    </Link>
                     <Modal
                         aria-labelledby="transition-modal-title"
                         aria-describedby="transition-modal-description"
@@ -137,7 +160,7 @@ const AssignmentInfoForm = ({ createNewAssigment, selectedUsers, names }) => {
                 </form>
             </Fragment>
 
-        </div>
+        </div >
     );
 };
 
@@ -150,8 +173,9 @@ AssignmentInfoForm.propTypes = {
 const mapStateToProps = state => ({
     selectedUsers: state.user.selectedUsers,
     names: state.user.selectedUsersName,
+    setSelectedUsers: PropTypes.func.isRequired,
 });
 export default connect(
     mapStateToProps,
-    { createNewAssigment }
+    { createNewAssigment, setSelectedUsers }
 )(AssignmentInfoForm);

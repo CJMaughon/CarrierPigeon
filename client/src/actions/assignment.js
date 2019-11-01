@@ -24,7 +24,6 @@ export const createNewAssigment = (
         dueDate,
     });
     try {
-        console.log(body);
         const res = await axios.post('/api/assignments', body, config);
         // setError('Successfully created new account!', 'success');
         dispatch({

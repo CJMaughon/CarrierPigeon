@@ -18,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Link } from 'react-router-dom';
+
 const CreateAssignment = ({ getUsers, setSelectedUsers, user: { users, loading } }) => {
 
     useEffect(() => {
