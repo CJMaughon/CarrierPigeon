@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Tab from './Tab';
 import './TabContainer.css';
 
@@ -24,8 +23,7 @@ export default class TabContainer extends React.Component {
             return <button key={i} onClick={onclick} className={`tab-header ${selected === i ? 'tab-header-selected' : ''}`}>{h}</button>
         });
         const tabs = content.map((c, i) => {
-
-            return <Tab isShown={selected === i}>{c}</Tab>;
+            return <Tab key={i} isShown={selected === i}>{c}</Tab>;
         });
         return (
             <div className="tab-container">

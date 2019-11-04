@@ -15,3 +15,4 @@ export const SET_SELECTED_USERS = 'SET_SELECTED_USERS';
 export const ADD_SUCCESS = 'ADD_SUCCESS';
 export const ADD_FAIL = 'ADD_FAIL';
 export const GET_ASSIGNMENTS = 'GET_ASSIGNMENTS';
+export const GET_ASSIGNMENT = 'GET_ASSIGNMENT';

@@ -38,12 +38,14 @@ img {
 
 /* Text Styles*/
 .x-large {
+  
   font-size: 4rem;
   line-height: 1.2;
   margin-bottom: 1rem;
 }
 
 .large {
+  font-family: 'Palatino';
   font-size: 3rem;
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -276,6 +278,17 @@ img {
   text-align: center;
 }
 
+.instructor-landing-inner {
+  color: #21bff5;
+  height: 100%;
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 /* Profiles Page */
 .profile {
   display: grid;
