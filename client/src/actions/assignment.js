@@ -2,7 +2,8 @@ import axios from 'axios';
 import {
     ADD_FAIL,
     ADD_SUCCESS,
-    GET_ASSIGNMENTS
+    GET_ASSIGNMENTS,
+    GET_ASSIGNMENT
 } from './types';
 
 // Add new assigment 
@@ -26,7 +27,6 @@ export const createNewAssigment = (
     try {
         console.log(body);
         const res = await axios.post('/api/assignments', body, config);
-        // setError('Successfully created new account!', 'success');
         dispatch({
             type: ADD_SUCCESS,
             payload: res.data
@@ -58,10 +58,26 @@ export const getAssignments = () => async dispatch => {
     }
 };
 
+// Get assigments
+export const getAssignment = assignmentId => async dispatch => {
+    try {
+        const res = await axios.get(`/api/assignments/${assignmentId}`);
+        dispatch({
+            type: GET_ASSIGNMENT,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: ADD_FAIL,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+
 // Get Instructor Assignments
 export const getInstructorAssignments = (userId) => async dispatch => {
     try {
-        const url = '/api/assignments/' + userId;
+        const url = '/api/assignments/assigned/' + userId;
         const res = await axios.get(url);
         dispatch({
             type: GET_ASSIGNMENTS,

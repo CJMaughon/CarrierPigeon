@@ -77,9 +77,29 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
-// @route 	GET api/assignments
+// @route 	GET api/assignments/:id
 // @access 	Public
 router.get('/:id', auth, async (req, res) => {
+    try {
+        const assignment = await Assignment.findById(req.params.id);
+
+        if (!assignment) {
+            return res.status(404).json({ msg: 'Assignment not found' });
+        }
+
+        res.json(assignment);
+    } catch (err) {
+        console.error(err.message);
+        if (err.kind === 'ObjectId') {
+            return res.status(404).json({ msg: 'Assignment not found' });
+        }
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route 	GET api/assignments/assigned
+// @access 	Public
+router.get('/assigned/:id', auth, async (req, res) => {
     const userId = req.params.id;
     try {
         let assignments = await Assignment.find({ assignedInstructors: userId }).sort({ dueDate: 1 });
@@ -100,5 +120,6 @@ router.get('/:id', auth, async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
 module.exports = router;
 
