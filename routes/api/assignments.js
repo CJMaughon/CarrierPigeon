@@ -4,6 +4,7 @@ const Assignment = require('../../models/Assignment');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
+var multer = require('multer');
 // @route 	POST api/assignments
 // @desc	Route to create new assignments
 // @access 	Public
@@ -121,5 +122,37 @@ router.get('/assigned/:id', auth, async (req, res) => {
     }
 });
 
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'downloads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+});
+
+const upload = multer({ storage: storage }).array('file');
+
+router.put('/submit_assignment/:id', auth, async (req, res) => {
+    try {
+        upload(req, res, function (err) {
+            if (err instanceof multer.MulterError) {
+                console.log('get here')
+                return res.status(500).json(err)
+            } else if (err) {
+                console.log('get here')
+                return res.status(500).json(err)
+            }
+        });
+        const assignment = await Assignment.findById(req.params.id).updateOne({}, { isSubmitted: true, status: 'submitted' });
+        console.log("Files have been added to downloads folder!")
+        res.json({ message: 'submitted' });
+    } catch (err) {
+        console.log("get here ?")
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 module.exports = router;
 

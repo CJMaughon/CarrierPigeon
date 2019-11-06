@@ -16,14 +16,14 @@ const InstructorDashboard = ({ getInstructorAssignments, authLoading, assignment
 
   function getTab(assignmentItems) {
 
-    const todoItems = assignmentItems.filter(a => a.status !== 'Submitted').sort((a, b) => {
+    const todoItems = assignmentItems.filter(a => a.status !== 'submitted').sort((a, b) => {
       return a.dueDate - b.dueDate;
     }).map(a => {
       return (
         <li key={a._id} className="assignment-item"><Assignment {...a} /></li>
       )
     });
-    const historyItems = assignmentItems.filter(a => a.status === 'Submitted').sort((a, b) => {
+    const historyItems = assignmentItems.filter(a => a.status === 'submitted').sort((a, b) => {
       return a.dueDate - b.dueDate;
     }).map(a => {
       return (
