@@ -13,8 +13,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-const AdminDashboard = ({ getAssignments, loading, assignments, auth: { user } }) => {
-
+const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, auth: { user } }) => {
   useEffect(() => {
     getAssignments();
   }, [getAssignments]);
@@ -53,7 +52,7 @@ const AdminDashboard = ({ getAssignments, loading, assignments, auth: { user } }
   const CustomizedTables = () => {
     const classes = useStyles();
 
-    return loading ? (
+    return (authLoading || loading) ? (
       <Spinner />
     ) : (
         <Paper className={classes.root}>
@@ -108,7 +107,8 @@ AdminDashboard.propTypes = {
 const mapStateToProps = state => ({
   auth: state.auth,
   assignments: state.assignment.assignments,
-  loading: state.assignment.loading
+  loading: state.assignment.loading,
+  authLoading: state.auth.loading
 });
 export default connect(
   mapStateToProps,
