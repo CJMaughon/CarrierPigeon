@@ -18,6 +18,7 @@ const auth = new google.auth.JWT(
 );
 const drive = google.drive({version: 'v3', auth});
 const fs = require('fs');
+const path = require('path');
 const async = require('async');
 
 // const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9';
@@ -83,7 +84,7 @@ router.get('/', appAuth, async (req, res) => {
     try {
       getFolders().then((response) => {
       res.send(response.data.files.map((file) => {
-      return file.name;
+      return file.id;
     }));
   });
     } catch (err) {
@@ -95,9 +96,8 @@ router.get('/', appAuth, async (req, res) => {
 router.post('/', appAuth, async (req, res) => {
 
   try {
-    uploadTestFile().then((response) => {
-      res.send(response.data.name);
-    });
+    uploadTestFile();
+    res.send('File Uploaded');
   } catch (err) {
     console.error(err.message);
     res.status(500).send('File not uploaded');
@@ -106,31 +106,44 @@ router.post('/', appAuth, async (req, res) => {
 
 function getFolders(){
   return drive.files.list({
-    q: "name contains 'testpigeon_again6'"
+    q: "name contains 'logo'"
   });
 }
 
 function uploadTestFile() {
-  const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9';
+  const folderId = '1vMG1uAopCXIlYLJiBOc3lfeEZodmAdFP'
   //upload
   const fileMetadata = {
-      'name': 'testpigeon_again7',
+      'name': 'gt-logo',
       parents: [folderId]
   };
-  const media = {
-      body: fs.createReadStream('/home/cjm/CarrierPigeon/testpigeon_again.jpg')
+
+  fs.readdir(path.join(__dirname, '../../downloads'), function (err, files) {
+    if (err) {
+      return console.log(err);
+    }
+    const media = {
+      body: fs.createReadStream('/home/cjm/CarrierPigeon/downloads/' + files[0])
   };
+
   return drive.files.create({
-      resource: fileMetadata,
-      media: media,
-      fields: 'id'
-  }, function (err, file) {
-      if (err) {
-          console.error(err);
-      } else {
-          console.log(file.data.id);
-      }
+    resource: fileMetadata,
+    media: media,
+    fields: 'id'
+}, function (err, file) {
+    if (err) {
+        console.error(err);
+    } else {
+        console.log(file.data.id);
+        fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + files[0])
+    }
+});
   });
+
+  
+  
+
+
 }
 
 module.exports = router;
