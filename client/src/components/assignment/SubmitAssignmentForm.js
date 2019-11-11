@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
-import { getAssignment } from '../../actions/assignment';
+import { getAssignment, setUploading, submitAssignment } from '../../actions/assignment';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -14,8 +14,11 @@ import AttachmentIcon from '@material-ui/icons/Attachment';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import { green } from '@material-ui/core/colors';
+import { Redirect } from 'react-router-dom';
 const formatDate = date => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() + 1900}`;
 }
@@ -40,14 +43,17 @@ const useStyles = makeStyles(theme => ({
     },
     uploadButton: {
         marginLeft: theme.spacing(2),
-    }
+    },
+    buttonProgress: {
+        color: green[500],
+        marginTop: theme.spacing(3)
+    },
 }));
 
-const SubmitAssignmentForm = ({ getAssignment, assignment: { assignment, loadingAssignment }, match }) => {
+const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, assignment: { assignment, loadingAssignment, isUploadingFiles }, match }) => {
     const classes = useStyles();
 
     const [selectedFiles, setSelectedFiles] = React.useState([]);
-
     const onInputFileChanged = event => {
         setSelectedFiles([...selectedFiles, event.target.files]);
     };
@@ -59,6 +65,11 @@ const SubmitAssignmentForm = ({ getAssignment, assignment: { assignment, loading
         setSelectedFiles(newSelectedFiles);
     };
 
+    const onSubmit = async e => {
+        e.preventDefault();
+        setUploading();
+        await submitAssignment(assignment._id, selectedFiles);
+    };
     const fileItems = selectedFiles && selectedFiles.map((files, index) => {
         return (
             <ListItem key={files[0].name} id={index}>
@@ -86,7 +97,7 @@ const SubmitAssignmentForm = ({ getAssignment, assignment: { assignment, loading
     useEffect(() => {
         getAssignment(match.params.id);
     }, [getAssignment]);
-    return loadingAssignment || assignment === null ? (
+    return (loadingAssignment || assignment === null) ? (
         <Spinner />
     ) : (
             <section className='landing'>
@@ -152,23 +163,32 @@ const SubmitAssignmentForm = ({ getAssignment, assignment: { assignment, loading
                             </List>
                         </div>
                     </Grid>
-
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                    >
-                        <i className={`fas fa-paper-plane ${classes.icon}`}></i>
-                        Submit
+                    <div>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            disabled={selectedFiles.length === 0 || isUploadingFiles}
+                            className={`classes.button ${isUploadingFiles ? 'disabled' : ''}`}
+                            onClick={onSubmit}
+                        >
+                            <i className={`fas fa-paper-plane ${classes.icon}`}></i>
+                            Submit
                      </Button>
+                    </div>
+                    <div>
+                        {isUploadingFiles && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    </div>
                 </div>
-            </section>
+            </section >
         );
 };
 
 SubmitAssignmentForm.propTypes = {
     getAssignment: PropTypes.func.isRequired,
-    assignment: PropTypes.object.isRequired
+    setUploading: PropTypes.func.isRequired,
+    assignment: PropTypes.object.isRequired,
+    submitAssignment: PropTypes.func.isRequired,
+
 };
 
 const mapStateToProps = state => ({
@@ -177,5 +197,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getAssignment }
+    { getAssignment, setUploading, submitAssignment }
 )(SubmitAssignmentForm);

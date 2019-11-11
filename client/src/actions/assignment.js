@@ -3,7 +3,11 @@ import {
     ADD_FAIL,
     ADD_SUCCESS,
     GET_ASSIGNMENTS,
-    GET_ASSIGNMENT
+    GET_ASSIGNMENT,
+    SET_UPLOADING,
+    SUBMIT_SUCCESS,
+    SUBMIT_FAIL
+
 } from './types';
 
 // Add new assigment 
@@ -13,6 +17,7 @@ export const createNewAssigment = (
     assignedInstructors,
     dueDate,
 ) => async dispatch => {
+
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -58,6 +63,23 @@ export const getAssignments = () => async dispatch => {
     }
 };
 
+
+// Loading assigments
+export const loadingAssignment = () => async dispatch => {
+    try {
+        const res = await axios.get('/api/assignments');
+        dispatch({
+            type: GET_ASSIGNMENTS,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: ADD_FAIL,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+
 // Get assigments
 export const getAssignment = assignmentId => async dispatch => {
     try {
@@ -87,6 +109,44 @@ export const getInstructorAssignments = (userId) => async dispatch => {
         dispatch({
             type: ADD_FAIL,
             payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+
+// set uploading
+export const setUploading = () => async dispatch => {
+    dispatch({
+        type: SET_UPLOADING,
+    });
+};
+
+// submit assignment
+export const submitAssignment = (
+    assignmentId,
+    files,
+) => async dispatch => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        const data = new FormData()
+        for (var i = 0; i < files.length; i++) {
+            data.append('file', files[i][0])
+        }
+        await axios.put(`/api/assignments/submit_assignment/${assignmentId}`, data, config);
+        dispatch({
+            type: SUBMIT_SUCCESS
+        });
+    } catch (err) {
+        console.log(err)
+        const errors = err.response.data.errors;
+        if (errors) {
+            console.log(errors);
+        }
+        dispatch({
+            type: SUBMIT_FAIL
         });
     }
 };

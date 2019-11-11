@@ -2,13 +2,17 @@ import {
     ADD_SUCCESS,
     ADD_FAIL,
     GET_ASSIGNMENTS,
-    GET_ASSIGNMENT
+    GET_ASSIGNMENT,
+    SET_UPLOADING,
+    SUBMIT_SUCCESS,
+    SUBMIT_FAIL
 } from '../actions/types';
 
 const initialState = {
     assignments: [],
     assignment: null,
-    loadingAssignment: true
+    loadingAssignment: true,
+    isUploadingFiles: false
 };
 
 export default function (state = initialState, action) {
@@ -32,6 +36,20 @@ export default function (state = initialState, action) {
                 loadingAssignment: false,
             };
         case ADD_FAIL:
+            return {
+                ...state
+            };
+        case SET_UPLOADING:
+            return {
+                ...state,
+                isUploadingFiles: true,
+            }
+        case SUBMIT_SUCCESS:
+            return {
+                ...state,
+                isUploadingFiles: false,
+            }
+        case SUBMIT_FAIL:
             return {
                 ...state
             };
