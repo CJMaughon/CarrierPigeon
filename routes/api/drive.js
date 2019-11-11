@@ -84,12 +84,12 @@ router.get('/', appAuth, async (req, res) => {
     try {
       getFolders().then((response) => {
       res.send(response.data.files.map((file) => {
-      return file.id;
+        return file.name;
     }));
   });
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
+        console.error(err.message);
+        res.status(500).send('Server Error');
     }
 });
 
@@ -99,15 +99,13 @@ router.post('/', appAuth, async (req, res) => {
     uploadTestFile();
     res.send('File Uploaded');
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('File not uploaded');
+      console.error(err.message);
+      res.status(500).send('File not uploaded');
   }
 });
 
 function getFolders(){
-  return drive.files.list({
-    q: "name contains 'logo'"
-  });
+  return drive.files.list();
 }
 
 function uploadTestFile() {
@@ -124,26 +122,21 @@ function uploadTestFile() {
     }
     const media = {
       body: fs.createReadStream('/home/cjm/CarrierPigeon/downloads/' + files[0])
-  };
+    };
 
-  return drive.files.create({
-    resource: fileMetadata,
-    media: media,
-    fields: 'id'
-}, function (err, file) {
-    if (err) {
-        console.error(err);
-    } else {
-        console.log(file.data.id);
-        fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + files[0])
-    }
-});
+    return drive.files.create({
+      resource: fileMetadata,
+      media: media,
+      fields: 'id'
+    }, function (err, file) {
+      if (err) {
+          console.error(err);
+      } else {
+          console.log(file.data.id);
+          fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + files[0])
+      }
+    });
   });
-
-  
-  
-
-
 }
 
 module.exports = router;
