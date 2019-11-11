@@ -92,11 +92,44 @@ router.get('/', appAuth, async (req, res) => {
     }
 });
 
+router.post('/', appAuth, async (req, res) => {
+
+  try {
+    uploadTestFile().then((response) => {
+      res.send(response.data.name);
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('File not uploaded');
+  }
+});
+
 function getFolders(){
   return drive.files.list({
-    q: "mimeType = 'application/vnd.google-apps.folder'",
-    pageSize: 15,
-    fields: 'nextPageToken, files(id, name)',
+    q: "name contains 'testpigeon_again6'"
+  });
+}
+
+function uploadTestFile() {
+  const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9';
+  //upload
+  const fileMetadata = {
+      'name': 'testpigeon_again7',
+      parents: [folderId]
+  };
+  const media = {
+      body: fs.createReadStream('/home/cjm/CarrierPigeon/testpigeon_again.jpg')
+  };
+  return drive.files.create({
+      resource: fileMetadata,
+      media: media,
+      fields: 'id'
+  }, function (err, file) {
+      if (err) {
+          console.error(err);
+      } else {
+          console.log(file.data.id);
+      }
   });
 }
 
