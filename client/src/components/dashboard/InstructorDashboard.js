@@ -1,93 +1,76 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
+import Spinner from '../layout/Spinner';
+import { getInstructorAssignments } from '../../actions/assignment';
 import Assignment from './Assignment';
 import TabContainer from './TabContainer';
-const assignments = [
-  {
-    id: 0,
-    name: 'Task 1',
-    status: 'Submitted',
-    statusDate: new Date(2019, 6, 25)
-  },
-  {
-    id: 1, 
-    name: 'Task 2',
-    status: 'Submitted',
-    statusDate: new Date(2019, 7, 25)
-  },
-  {
-    id: 2,
-    name: 'Task 3',
-    status: 'Overdue',
-    statusDate: new Date(2019, 8, 25)
-  },
-  {
-    id: 3,
-    name: 'Task 4',
-    status: 'Upcoming',
-    statusDate: new Date(2019, 9, 25)
-  },
-  {
-    id: 4,
-    name: 'Task 5',
-    status: 'Upcoming',
-    statusDate: new Date(2019, 10, 25)
-  }
-];
 
-const InstructorDashboard = ({logout, assigns}) => {
-  const todoItems = assignments.filter(a => a.status !== 'Submitted').sort((a, b) => {
-    return a.statusDate - b.statusDate;
-  }).map(a => {
-    return (
-      <li key={a.id} className="assignment-item"><Assignment {...a} /></li>
-    )
-  });
-  const historyItems = assignments.filter(a => a.status === 'Submitted').sort((a, b) => {
-    return a.statusDate - b.statusDate;
-  }).map(a => {
-    return (
-      <li key={a.name} className="assignment-item"><Assignment {...a} /></li>
-    )
-  });
-  //const headers = ['To Do', 'History'];
-  const tabStuff = [
-    {
-      header: 'To Do',
-      content: todoItems
-    },
-    {
-      header: 'History',
-      content: historyItems
+const InstructorDashboard = ({ getInstructorAssignments, authLoading, assignmentItems, logout, loadingAssignment, auth: { user } }) => {
+  useEffect(() => {
+    if (user != null) {
+      getInstructorAssignments(user._id);
     }
-  ];
-  //const contents = [<ul>{todoItems}</ul>, <ul>{historyItems}</ul>];
-  const tabs = <TabContainer headers={tabStuff.map(t => t.header)} content={tabStuff.map(t => t.content)} />
-  return (
-    <section className='landing'>
-      <div className='dark-overlay'>
-        <div className='landing-inner'>
+  }, [user]);
+
+  function getTab(assignmentItems) {
+
+    const todoItems = assignmentItems.filter(a => a.status !== 'submitted').sort((a, b) => {
+      return a.dueDate - b.dueDate;
+    }).map(a => {
+      return (
+        <li key={a._id} className="assignment-item"><Assignment {...a} /></li>
+      )
+    });
+    const historyItems = assignmentItems.filter(a => a.status === 'submitted').sort((a, b) => {
+      return a.dueDate - b.dueDate;
+    }).map(a => {
+      return (
+        <li key={a._id} className="assignment-item"><Assignment {...a} /></li>
+      )
+    });
+    const tabStuff = [
+      {
+        header: 'To Do',
+        content: todoItems
+      },
+      {
+        header: 'History',
+        content: historyItems
+      }
+    ];
+    const tabs = <TabContainer headers={tabStuff.map(t => t.header)} content={tabStuff.map(t => t.content)} />
+    return tabs;
+  }
+
+  return (authLoading || loadingAssignment) ? (
+    <Spinner />
+  ) : (
+      <section className='landing'>
+        <div className='instructor-landing-inner'>
           <h1 className='large'>Instructor Dashboard</h1>
-          {tabs}
+          {getTab(assignmentItems)}
           <button className='tab-header' onClick={logout}>LOG OUT</button>
         </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
 };
+
 
 InstructorDashboard.propTypes = {
   logout: PropTypes.func.isRequired,
-  assigns: PropTypes.array,
+  getInstructorAssignments: PropTypes.func.isRequired,
 };
 
-InstructorDashboard.defaultProps = {
-  assigns: [],
-};
+const mapStateToProps = state => ({
+  auth: state.auth,
+  assignmentItems: state.assignment.assignments,
+  loadingAssignment: state.assignment.loadingAssignment,
+  authLoading: state.auth.loading
+});
 
 export default connect(
-  null,
-  { logout }
+  mapStateToProps,
+  { getInstructorAssignments, logout }
 )(InstructorDashboard);

@@ -38,12 +38,14 @@ img {
 
 /* Text Styles*/
 .x-large {
+  
   font-size: 4rem;
   line-height: 1.2;
   margin-bottom: 1rem;
 }
 
 .large {
+  font-family: 'Palatino';
   font-size: 3rem;
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -232,16 +234,6 @@ img {
   height: 100%;
 }
 
-.table th,
-.table td {
-  padding: 1rem;
-  text-align: left;
-}
-
-.table th {
-  background: var(--light-color);
-}
-
 /* Navbar */
 .navbar {
   display: flex;
@@ -286,6 +278,17 @@ img {
   text-align: center;
 }
 
+.instructor-landing-inner {
+  color: #21bff5;
+  height: 100%;
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 /* Profiles Page */
 .profile {
   display: grid;
@@ -520,7 +523,7 @@ img {
   padding: 8% 0 0;
   margin: auto;
 }
-.form {
+.form-a {
   position: relative;
   z-index: 1;
   background: #ffffff;
@@ -529,7 +532,16 @@ img {
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
-.form input {
+.form-b {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  margin: 0.5rem 4rem;
+  padding: 20px 200px 100px 200px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form-a input {
   font-family: 'Roboto', sans-serif;
   outline: 0;
   background: #f2f2f2;
@@ -540,7 +552,22 @@ img {
   box-sizing: border-box;
   font-size: 14px;
 }
-.form button {
+.btn-next {
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #21bff5;
+  display: inline-block;
+  border: 0;
+  padding: 15px;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+.form-a button {
   font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
   outline: 0;
@@ -554,21 +581,27 @@ img {
   transition: all 0.3 ease;
   cursor: pointer;
 }
-.form button:hover,
-.form button:active,
-.form button:focus {
+.btn-next:hover,
+.btn-next:active,
+.btn-next:focus .form-a button:hover,
+.form-a button:active,
+.form-a button:focus {
   background: #43a047;
 }
-.form .message {
+.btn-next:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+.form-a .message {
   margin: 15px 0 0;
   color: #b3b3b3;
   font-size: 12px;
 }
-.form .message a {
+.form-a .message a {
   color: #4caf50;
   text-decoration: none;
 }
-.form .register-form {
+.form-a .register-form {
   display: none;
 }
 #link {
@@ -610,7 +643,6 @@ img {
 .container {
   margin: auto;
   overflow: hidden;
-  padding: 0 2rem;
   margin-top: 6rem;
   margin-bottom: 3rem;
 }
@@ -644,4 +676,13 @@ img {
 }
 body {
   font-family: 'Roboto', sans-serif;
+}
+
+.picker {
+  margin: 30px;
+}
+
+.instructor-item {
+  color: #4caf50;
+  font-family: 'Roboto', sans-serif, bold;
 }
