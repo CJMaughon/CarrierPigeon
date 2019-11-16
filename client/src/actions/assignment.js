@@ -30,7 +30,6 @@ export const createNewAssigment = (
         dueDate,
     });
     try {
-        console.log(body);
         const res = await axios.post('/api/assignments', body, config);
         dispatch({
             type: ADD_SUCCESS,

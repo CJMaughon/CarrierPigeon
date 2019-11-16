@@ -567,6 +567,22 @@ img {
   right: 20px;
   bottom: 20px;
 }
+
+.btn-back {
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #21bff5;
+  display: inline-block;
+  border: 0;
+  padding: 15px;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
 .form-a button {
   font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
@@ -582,11 +598,13 @@ img {
   cursor: pointer;
 }
 .btn-next:hover,
+.btn-back:hover,
 .btn-next:active,
 .btn-next:focus .form-a button:hover,
 .form-a button:active,
 .form-a button:focus {
   background: #43a047;
+  letter-spacing: 0.1em;
 }
 .btn-next:disabled {
   background: gray;
