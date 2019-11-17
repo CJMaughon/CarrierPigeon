@@ -19,6 +19,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { green } from '@material-ui/core/colors';
 import { Redirect } from 'react-router-dom';
+import { userInfo } from 'os';
 const formatDate = date => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() + 1900}`;
 }
@@ -68,7 +69,7 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     const onSubmit = async e => {
         e.preventDefault();
         setUploading();
-        await submitAssignment(assignment._id, selectedFiles);
+        await submitAssignment(assignment._id, 'test_user',selectedFiles);
     };
     const fileItems = selectedFiles && selectedFiles.map((files, index) => {
         return (

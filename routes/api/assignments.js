@@ -128,13 +128,13 @@ const storage = multer.diskStorage({
         cb(null, 'downloads')
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname)
+        cb(null, 'Test_User-Test_Date' + '-' + file.originalname)
     }
 });
 
 const upload = multer({ storage: storage }).array('file');
 
-router.put('/submit_assignment/:id', auth, async (req, res) => {
+router.put('/submit_assignment/:id/:username', auth, async (req, res) => {
     try {
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
@@ -145,6 +145,7 @@ router.put('/submit_assignment/:id', auth, async (req, res) => {
                 return res.status(500).json(err)
             }
         });
+        console.log(req.params);
         const assignment = await Assignment.findById(req.params.id).updateOne({}, { isSubmitted: true, status: 'submitted' });
         console.log("Files have been added to downloads folder!")
         res.json({ message: 'submitted' });
