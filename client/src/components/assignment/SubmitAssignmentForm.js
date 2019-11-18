@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, assignment: { assignment, loadingAssignment, isUploadingFiles }, match }) => {
+const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, assignment: { assignment, loadingAssignment, isUploadingFiles }, match, auth: { user } }) => {
     const classes = useStyles();
 
     const [selectedFiles, setSelectedFiles] = React.useState([]);
@@ -69,7 +69,7 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     const onSubmit = async e => {
         e.preventDefault();
         setUploading();
-        await submitAssignment(assignment._id, 'test_user',selectedFiles);
+        await submitAssignment(user._id, assignment._id, 'test_user', selectedFiles);
     };
     const fileItems = selectedFiles && selectedFiles.map((files, index) => {
         return (
@@ -193,6 +193,7 @@ SubmitAssignmentForm.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    auth: state.auth,
     assignment: state.assignment
 });
 
