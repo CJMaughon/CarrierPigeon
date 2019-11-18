@@ -103,7 +103,7 @@ router.get('/:id', auth, async (req, res) => {
 router.get('/assigned/:id', auth, async (req, res) => {
     const userId = req.params.id;
     try {
-        let assignments = await Assignment.find({ assignedInstructors: userId }).sort({ dueDate: 1 });
+        let assignments = await Assignment.find({ assignedInstructor: userId }).sort({ dueDate: 1 });
         assignments.map((assignment) => {
             const today = new Date();
             if (assignment.isSubmitted) {
