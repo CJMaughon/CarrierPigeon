@@ -146,7 +146,7 @@ router.put('/submit_assignment/:user_id/:assignment_id/:username', auth, async (
             }
         });
         // user id here 
-        const user_id = req.params;
+        const user_id = req.params.user_id;
         console.log(user_id);
 
         const assignment = await Assignment.findById(req.params.assignment_id).updateOne({}, { isSubmitted: true, status: 'submitted' });
