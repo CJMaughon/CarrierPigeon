@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const AssignmentSchema = new Schema({
+    assignmentAdminID: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -11,10 +15,6 @@ const AssignmentSchema = new Schema({
         type: String,
         required: true
     },
-    assignedInstructors: [{
-        type: [String],
-        required: true
-    }],
     isSubmitted: {
         type: Boolean,
         default: false
@@ -27,6 +27,10 @@ const AssignmentSchema = new Schema({
         type: Date,
         required: true
     },
+    assignedInstructor: {
+        type: String,
+        required: true
+    },
 });
 
-module.exports = Assignment = mongoose.model('assignments', AssignmentSchema);
+module.exports = Assignment = mongoose.model('assignment', AssignmentSchema);

@@ -3,7 +3,7 @@ const router = express.Router();
 const Assignment = require('../../models/Assignment');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
-
+const uuid = require('uuid/v1');
 var multer = require('multer');
 // @route 	POST api/assignments
 // @desc	Route to create new assignments
@@ -30,21 +30,21 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
         const { name, detail, assignedInstructors, dueDate } = req.body;
-        try {
+        const assignmentId = uuid();
+        const promises = assignedInstructors.map(async instructor => {
             assignment = new Assignment({
                 name,
                 detail,
-                assignedInstructors,
                 dueDate,
             });
+            assignment.assignmentAdminID = assignmentId
+            assignment.assignedInstructor = instructor
             await assignment.save();
-            // Return jsonwebtoken
-            const payload = {
-                assignment: {
-                    id: assignment._id
-                }
-            };
-            res.json(payload);
+        });
+
+        try {
+            await Promise.all(promises);
+            res.json({ message: 'Assignment successfully created.' });
         } catch (err) {
             console.log(err.message);
             res.status(500).send('Server error');
@@ -87,8 +87,8 @@ router.get('/:id', auth, async (req, res) => {
         if (!assignment) {
             return res.status(404).json({ msg: 'Assignment not found' });
         }
-
         res.json(assignment);
+
     } catch (err) {
         console.error(err.message);
         if (err.kind === 'ObjectId') {

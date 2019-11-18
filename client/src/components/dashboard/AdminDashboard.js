@@ -62,7 +62,7 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
                 <StyledTableCell>Assignment Name</StyledTableCell>
                 <StyledTableCell align="right">Due Date</StyledTableCell>
                 <StyledTableCell align="right">Details</StyledTableCell>
-                <StyledTableCell align="right">Number of Instructors</StyledTableCell>
+                <StyledTableCell align="right">Assigned Instructors ID</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -73,7 +73,7 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
                   </StyledTableCell>
                   <StyledTableCell align="right">{new Date(row.dueDate).toLocaleDateString()}</StyledTableCell>
                   <StyledTableCell align="right">{row.detail}</StyledTableCell>
-                  <StyledTableCell align="right">{row.assignedInstructors.length}</StyledTableCell>
+                  <StyledTableCell align="right">{row.assignedInstructor}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

@@ -92,7 +92,7 @@ const AssignmentInfoForm = ({ createNewAssigment, setSelectedUsers, selectedUser
     const onSubmit = async e => {
         e.preventDefault();
         await createNewAssigment(name, detail_info, selectedUsers, selectedDate);
-        handleOpen();
+        // handleOpen();
     };
     return (
         <div>
