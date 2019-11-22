@@ -52,25 +52,36 @@ router.post(
     }
 );
 
-
 // @route 	GET api/assignments
 // @access 	Public
 router.get('/', auth, async (req, res) => {
     try {
-        const assignments = await Assignment.find().sort({ date: -1 });
-        res.json(assignments);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-});
-
-
-// @route 	GET api/assignments
-// @access 	Public
-router.get('/', auth, async (req, res) => {
-    try {
-        const assignments = await Assignment.find().sort({ date: -1 });
+        const assignments = await Assignment.aggregate([
+            {
+                $project: {
+                    assignmentAdminID: 1,
+                    name: 1,
+                    detail: 1,
+                    dueDate: 1,
+                    hasSubmitted: {  // Set to 1 if isSubmitted = True
+                        $cond: [{ $eq: ["$isSubmitted", true] }, 1, 0]
+                    },
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        assignmentAdminID: "$assignmentAdminID",
+                        name: "$name",
+                        detail: "$detail",
+                        dueDate: "$dueDate",
+                    },
+                    total_submissions: { $sum: 1 },
+                    countSubmitted: { $sum: "$hasSubmitted" },
+                }
+            },
+            { $sort: { date: -1 } }
+        ])
         res.json(assignments);
     } catch (err) {
         console.error(err.message);

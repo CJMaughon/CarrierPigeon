@@ -17,7 +17,7 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
   useEffect(() => {
     getAssignments();
   }, [getAssignments]);
-
+  console.log(assignments);
   const StyledTableCell = withStyles(theme => ({
     head: {
       backgroundColor: theme.palette.common.black,
@@ -67,13 +67,13 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
             </TableHead>
             <TableBody>
               {assignments.map(row => (
-                <StyledTableRow key={row.name}>
+                <StyledTableRow key={row._id.assignmentAdminID}>
                   <StyledTableCell component="th" scope="row">
-                    {row.name}
+                    {row._id.name}
                   </StyledTableCell>
-                  <StyledTableCell align="right">{new Date(row.dueDate).toLocaleDateString()}</StyledTableCell>
-                  <StyledTableCell align="right">{row.detail}</StyledTableCell>
-                  <StyledTableCell align="right">{row.assignedInstructor}</StyledTableCell>
+                  <StyledTableCell align="right">{new Date(row._id.dueDate).toLocaleDateString()}</StyledTableCell>
+                  <StyledTableCell align="right">{row._id.detail}</StyledTableCell>
+                  <StyledTableCell align="right">{row._id.assignedInstructor}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
