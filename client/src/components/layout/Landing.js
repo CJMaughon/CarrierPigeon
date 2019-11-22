@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { register, setError, login, switchForm } from '../../actions/auth';
 import Error from './Alert';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert2';
 const Landing = ({
   switchForm,
