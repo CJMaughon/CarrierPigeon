@@ -17,7 +17,6 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
   useEffect(() => {
     getAssignments();
   }, [getAssignments]);
-  console.log(assignments);
   const StyledTableCell = withStyles(theme => ({
     head: {
       backgroundColor: theme.palette.common.black,
@@ -62,7 +61,7 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
                 <StyledTableCell>Assignment Name</StyledTableCell>
                 <StyledTableCell align="right">Due Date</StyledTableCell>
                 <StyledTableCell align="right">Details</StyledTableCell>
-                <StyledTableCell align="right">Assigned Instructors ID</StyledTableCell>
+                <StyledTableCell align="right">Submission Status</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -73,7 +72,7 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
                   </StyledTableCell>
                   <StyledTableCell align="right">{new Date(row._id.dueDate).toLocaleDateString()}</StyledTableCell>
                   <StyledTableCell align="right">{row._id.detail}</StyledTableCell>
-                  <StyledTableCell align="right">{row._id.assignedInstructor}</StyledTableCell>
+                  <StyledTableCell align="right">{row.countSubmitted} / {row.total_submissions}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
