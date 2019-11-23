@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react';
 import SplitPane from 'react-split-pane';
 import logo from '../../img/carrier_pigeon_landing.png';
