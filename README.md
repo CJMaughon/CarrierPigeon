@@ -21,8 +21,14 @@ git clone <URL>
 with the url from this repository in the directory you want to clone this repository to
 
 
-Run the following command in a terminal in the base project directory, and then in the client subdirectory
+Run the following command in a terminal in the base project directory
 ```
+npm install
+```
+
+Then navigate to the client directory and run npm install with the following commands
+```
+cd client
 npm install
 ```
 
