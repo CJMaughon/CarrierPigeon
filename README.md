@@ -8,3 +8,5 @@ App for The Growing Leaders
 - Email notifications not currently working right now, should have them done soon
 
 # Install Guide
+## Pre-requisites
+Testing
