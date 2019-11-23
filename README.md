@@ -9,4 +9,30 @@ App for The Growing Leaders
 
 # Install Guide
 ## Pre-requisites
-Testing
+Software necessary for installing and running the application
+- Node.js and NPM
+- Git
+
+## Download and Install Instructions
+Use the command
+```
+git clone <URL>
+```
+with the url from this repository in the directory you want to clone this repository to
+
+
+Run the following command in a terminal in the base project directory, and then in the client subdirectory
+```
+npm install
+```
+
+## Run Instructions
+To run in dev mode, use the command
+```
+npm run dev
+```
+
+To run the server itself, use the command
+```
+npm start
+```
