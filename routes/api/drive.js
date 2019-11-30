@@ -7,18 +7,26 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
 
+const fs = require('fs');
+const path = require('path');
 const { google } = require('googleapis');
-const credentials = require('../../credentials.json');
 const scopes = [
   'https://www.googleapis.com/auth/drive'
 ];
-const auth = new google.auth.JWT(
-  credentials.client_email, null,
-  credentials.private_key, scopes
-);
-const drive = google.drive({ version: 'v3', auth });
-const fs = require('fs');
-const path = require('path');
+
+
+// const for drive api
+// const credentials = require('../../credentials.json');
+// const auth = new google.auth.JWT(
+//   credentials.client_email, null,
+//   credentials.private_key, scopes
+// );
+// const drive = google.drive({ version: 'v3', auth });
+
+
+
+
+
 // const async = require('async');
 
 // const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9';
