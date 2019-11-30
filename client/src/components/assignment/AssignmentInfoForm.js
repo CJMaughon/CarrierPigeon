@@ -7,11 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import { createNewAssigment } from '../../actions/assignment';
 import { setSelectedUsers } from '../../actions/users';
 import { DatePicker } from "@material-ui/pickers";
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import swal from 'sweetalert2';
 const AssignmentInfoForm = ({ createNewAssigment, setSelectedUsers, selectedUsers, names }) => {
     const useStyles = makeStyles(theme => ({
         container: {
@@ -47,16 +45,6 @@ const AssignmentInfoForm = ({ createNewAssigment, setSelectedUsers, selectedUser
         },
     }));
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        window.location.href = "./admin_dashboard"
-    }
 
     const [assigmentFormData, setAssignmentFormData] = useState({
         name: '',
@@ -92,7 +80,12 @@ const AssignmentInfoForm = ({ createNewAssigment, setSelectedUsers, selectedUser
     const onSubmit = async e => {
         e.preventDefault();
         await createNewAssigment(name, detail_info, selectedUsers, selectedDate);
-        handleOpen();
+        swal.fire({
+            icon: 'success',
+            title: 'Successfuly Created Assignment!',
+        }).then((result) => {
+            window.location.href = "./admin_dashboard"
+        });
     };
     return (
         <div>
@@ -137,26 +130,6 @@ const AssignmentInfoForm = ({ createNewAssigment, setSelectedUsers, selectedUser
                     <Link to='/create_assignment'>
                         <button className='btn-back'>Back</button>
                     </Link>
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        className={classes.modal}
-                        open={open}
-                        onClose={handleClose}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            timeout: 500,
-                        }}
-                    >
-                        <Fade in={open}>
-                            <div className={classes.modalPaper}>
-                                <p className='lead'>
-                                    <i className='fas fa-check'></i> Successfully Created New Assignment.
-                                </p>
-                            </div>
-                        </Fade>
-                    </Modal>
                 </form>
             </Fragment>
 
