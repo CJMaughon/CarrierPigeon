@@ -7,10 +7,7 @@ import { connect } from 'react-redux';
 import { register, setError, login, switchForm } from '../../actions/auth';
 import Error from './Alert';
 import PropTypes from 'prop-types';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import { makeStyles } from '@material-ui/core/styles';
+import swal from 'sweetalert2';
 const Landing = ({
   switchForm,
   isLoginFormVisible,
@@ -33,33 +30,6 @@ const Landing = ({
       return <Redirect to='/admin_dashboard' />;
     }
 
-  }
-
-  const useStyles = makeStyles(theme => ({
-
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    modalPaper: {
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
-  }));
-
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    switchForm(!isLoginFormVisible);
   }
 
   const [registerFormData, setRegisterFormData] = useState({
@@ -97,7 +67,6 @@ const Landing = ({
       setError('Passwords do not match');
     } else {
       await register(name, email, password, mobile, location);
-      handleOpen();
       setRegisterFormData({
         name: '',
         email: '',
@@ -105,6 +74,12 @@ const Landing = ({
         location: '',
         password: '',
         password2: ''
+      });
+      swal.fire({
+        icon: 'info',
+        title: 'Thanks for signing up. An admin will review and approve your registration shortly.',
+      }).then((result) => {
+        switchForm(!isLoginFormVisible);
       });
     }
   };
@@ -211,26 +186,7 @@ const Landing = ({
               minLength='6'
             />
             <button>Submit</button>
-            <Modal
-              aria-labelledby="transition-modal-title"
-              aria-describedby="transition-modal-description"
-              className={classes.modal}
-              open={open}
-              onClose={handleClose}
-              closeAfterTransition
-              BackdropComponent={Backdrop}
-              BackdropProps={{
-                timeout: 500,
-              }}
-            >
-              <Fade in={open}>
-                <div className={classes.modalPaper}>
-                  <p className='lead'>
-                    <i className='fas fa-check'></i> Thanks for signing up. An admin will review and approve your registration shortly.
-                                </p>
-                </div>
-              </Fade>
-            </Modal>
+
             <Error></Error>
           </form>
           <div className='sign-up-text'>

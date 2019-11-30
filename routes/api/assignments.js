@@ -3,7 +3,7 @@ const router = express.Router();
 const Assignment = require('../../models/Assignment');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
-
+const uuid = require('uuid/v1');
 var multer = require('multer');
 // @route 	POST api/assignments
 // @desc	Route to create new assignments
@@ -30,21 +30,21 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
         const { name, detail, assignedInstructors, dueDate } = req.body;
-        try {
+        const assignmentId = uuid();
+        const promises = assignedInstructors.map(async instructor => {
             assignment = new Assignment({
                 name,
                 detail,
-                assignedInstructors,
                 dueDate,
             });
+            assignment.assignmentAdminID = assignmentId
+            assignment.assignedInstructor = instructor
             await assignment.save();
-            // Return jsonwebtoken
-            const payload = {
-                assignment: {
-                    id: assignment._id
-                }
-            };
-            res.json(payload);
+        });
+
+        try {
+            await Promise.all(promises);
+            res.json({ message: 'Assignment successfully created.' });
         } catch (err) {
             console.log(err.message);
             res.status(500).send('Server error');
@@ -87,8 +87,8 @@ router.get('/:id', auth, async (req, res) => {
         if (!assignment) {
             return res.status(404).json({ msg: 'Assignment not found' });
         }
-
         res.json(assignment);
+
     } catch (err) {
         console.error(err.message);
         if (err.kind === 'ObjectId') {
@@ -103,7 +103,7 @@ router.get('/:id', auth, async (req, res) => {
 router.get('/assigned/:id', auth, async (req, res) => {
     const userId = req.params.id;
     try {
-        let assignments = await Assignment.find({ assignedInstructors: userId }).sort({ dueDate: 1 });
+        let assignments = await Assignment.find({ assignedInstructor: userId }).sort({ dueDate: 1 });
         assignments.map((assignment) => {
             const today = new Date();
             if (assignment.isSubmitted) {
@@ -128,13 +128,13 @@ const storage = multer.diskStorage({
         cb(null, 'downloads')
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname)
+        cb(null, 'Test_User-Test_Date' + '-' + file.originalname)
     }
 });
 
 const upload = multer({ storage: storage }).array('file');
 
-router.put('/submit_assignment/:id', auth, async (req, res) => {
+router.put('/submit_assignment/:user_id/:assignment_id/:username', auth, async (req, res) => {
     try {
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
@@ -145,7 +145,11 @@ router.put('/submit_assignment/:id', auth, async (req, res) => {
                 return res.status(500).json(err)
             }
         });
-        const assignment = await Assignment.findById(req.params.id).updateOne({}, { isSubmitted: true, status: 'submitted' });
+        // user id here 
+        const user_id = req.params.user_id;
+        console.log(user_id);
+
+        const assignment = await Assignment.findById(req.params.assignment_id).updateOne({}, { isSubmitted: true, status: 'submitted' });
         console.log("Files have been added to downloads folder!")
         res.json({ message: 'submitted' });
     } catch (err) {

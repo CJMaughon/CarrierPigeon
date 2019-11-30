@@ -121,7 +121,9 @@ export const setUploading = () => async dispatch => {
 
 // submit assignment
 export const submitAssignment = (
+    userId,
     assignmentId,
+    username,
     files,
 ) => async dispatch => {
     try {
@@ -134,7 +136,7 @@ export const submitAssignment = (
         for (var i = 0; i < files.length; i++) {
             data.append('file', files[i][0])
         }
-        await axios.put(`/api/assignments/submit_assignment/${assignmentId}`, data, config);
+        await axios.put(`/api/assignments/submit_assignment/${userId}/${assignmentId}/${username}`, data, config);
         dispatch({
             type: SUBMIT_SUCCESS
         });

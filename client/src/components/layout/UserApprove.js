@@ -17,9 +17,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
+import swal from 'sweetalert2';
+import { Redirect } from 'react-router-dom';
 const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading } }) => {
 
     useEffect(() => {
@@ -33,16 +32,6 @@ const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const [open, setOpen] = React.useState(false);
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        window.location.href = "./approve_user"
-    }
     const handleRequestSort = (event, property) => {
         const isDesc = orderBy === property && order === 'desc';
         setOrder(isDesc ? 'asc' : 'desc');
@@ -101,10 +90,15 @@ const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading 
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
-    const onNextButtonClick = async e => {
+    const onApproveButtonClick = async e => {
         e.preventDefault();
         await approveUsers(idsSelected);
-        handleOpen();
+        swal.fire({
+            icon: 'success',
+            title: 'User Approved.',
+        }).then((result) => {
+            window.location.href = "./approve_user"
+        });
     }
     return loading ? (
         <Spinner />
@@ -186,27 +180,7 @@ const UserApprove = ({ getUnapprovedUsers, approveUsers, user: { users, loading 
                         />
                     </Paper>
                 </div>
-                <button className='btn-next' disabled={idsSelected.length === 0} onClick={onNextButtonClick}>Approve</button>
-                <Modal
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
-                    className={classes.modal}
-                    open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    BackdropComponent={Backdrop}
-                    BackdropProps={{
-                        timeout: 500,
-                    }}
-                >
-                    <Fade in={open}>
-                        <div className={classes.modalPaper}>
-                            <p className='lead'>
-                                <i className='fas fa-check'></i> User Approved.
-                                </p>
-                        </div>
-                    </Fade>
-                </Modal>
+                <button className='btn-next' disabled={idsSelected.length === 0} onClick={onApproveButtonClick}>Approve</button>
             </Fragment>
         );
 };

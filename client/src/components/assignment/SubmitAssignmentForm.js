@@ -18,7 +18,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { green } from '@material-ui/core/colors';
+import swal from 'sweetalert2';
+
 import { Redirect } from 'react-router-dom';
+import { userInfo } from 'os';
 const formatDate = date => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() + 1900}`;
 }
@@ -50,14 +53,21 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, assignment: { assignment, loadingAssignment, isUploadingFiles }, match }) => {
+const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, assignment: { assignment, loadingAssignment, isUploadingFiles }, match, auth: { user } }) => {
     const classes = useStyles();
 
     const [selectedFiles, setSelectedFiles] = React.useState([]);
+    const [redirect, setRedirect] = React.useState(false);
     const onInputFileChanged = event => {
         setSelectedFiles([...selectedFiles, event.target.files]);
     };
 
+
+    const renderRedirect = () => {
+        if (redirect) {
+            return <Redirect to='/instructor_dashboard' />
+        }
+    }
     const onDeleteIconClick = e => {
         const { id } = e.target;
         let newSelectedFiles = selectedFiles.slice(0);
@@ -68,7 +78,13 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     const onSubmit = async e => {
         e.preventDefault();
         setUploading();
-        await submitAssignment(assignment._id, selectedFiles);
+        await submitAssignment(user._id, assignment._id, 'test_user', selectedFiles);
+        swal.fire({
+            icon: 'success',
+            title: 'Successfuly Submitted Assignment!',
+        }).then((result) => {
+            setRedirect(true);
+        });
     };
     const fileItems = selectedFiles && selectedFiles.map((files, index) => {
         return (
@@ -100,7 +116,8 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     return (loadingAssignment || assignment === null) ? (
         <Spinner />
     ) : (
-            <section className='landing'>
+            < section className='landing' >
+                {renderRedirect()}
                 <div className='instructor-landing-inner'>
                     <h1 className='large'>Submit Assignment</h1>
                     <TextField
@@ -192,6 +209,7 @@ SubmitAssignmentForm.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    auth: state.auth,
     assignment: state.assignment
 });
 
