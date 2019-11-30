@@ -17,7 +17,6 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
   useEffect(() => {
     getAssignments();
   }, [getAssignments]);
-
   const StyledTableCell = withStyles(theme => ({
     head: {
       backgroundColor: theme.palette.common.black,
@@ -62,18 +61,18 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
                 <StyledTableCell>Assignment Name</StyledTableCell>
                 <StyledTableCell align="right">Due Date</StyledTableCell>
                 <StyledTableCell align="right">Details</StyledTableCell>
-                <StyledTableCell align="right">Assigned Instructors ID</StyledTableCell>
+                <StyledTableCell align="right">Submission Status</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {assignments.map(row => (
-                <StyledTableRow key={row.name}>
+                <StyledTableRow key={row._id.assignmentAdminID}>
                   <StyledTableCell component="th" scope="row">
-                    {row.name}
+                    {row._id.name}
                   </StyledTableCell>
-                  <StyledTableCell align="right">{new Date(row.dueDate).toLocaleDateString()}</StyledTableCell>
-                  <StyledTableCell align="right">{row.detail}</StyledTableCell>
-                  <StyledTableCell align="right">{row.assignedInstructor}</StyledTableCell>
+                  <StyledTableCell align="right">{new Date(row._id.dueDate).toLocaleDateString()}</StyledTableCell>
+                  <StyledTableCell align="right">{row._id.detail}</StyledTableCell>
+                  <StyledTableCell align="right">{row.countSubmitted} / {row.total_submissions}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
