@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Assignment = require('../../models/Assignment');
+const Submission = require('../../models/Submission');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 const uuid = require('uuid/v1');
@@ -145,7 +146,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).array('file');
 
-router.put('/submit_assignment/:user_id/:assignment_id/:username', auth, async (req, res) => {
+router.post('/submit_assignment/:user_id/:assignment_id/:username/:comment', auth, async (req, res) => {
     try {
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
@@ -158,7 +159,20 @@ router.put('/submit_assignment/:user_id/:assignment_id/:username', auth, async (
         });
         // user id here 
         const user_id = req.params.user_id;
-        console.log(user_id);
+
+        // array to stored google file urls after uploaded
+        const google_file_urls = [];
+
+        // TODO: post files to google and add url to google_file_urls array
+
+        const assignment_id = req.params.assignment_id;
+        const comment = req.params.comment;
+        const submission = new Submission({
+            assignmentID: assignment_id,
+            comment: comment,
+            files_url: google_file_urls,
+        });
+        await submission.save();
 
         const assignment = await Assignment.findById(req.params.assignment_id).updateOne({}, { isSubmitted: true, status: 'submitted' });
         console.log("Files have been added to downloads folder!")

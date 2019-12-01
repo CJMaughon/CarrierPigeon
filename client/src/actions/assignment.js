@@ -124,6 +124,7 @@ export const submitAssignment = (
     userId,
     assignmentId,
     username,
+    comment,
     files,
 ) => async dispatch => {
     try {
@@ -132,11 +133,11 @@ export const submitAssignment = (
                 'Content-Type': 'application/json'
             }
         };
-        const data = new FormData()
+        const data = new FormData();
         for (var i = 0; i < files.length; i++) {
-            data.append('file', files[i][0])
+            data.append('file', files[i][0]);
         }
-        await axios.put(`/api/assignments/submit_assignment/${userId}/${assignmentId}/${username}`, data, config);
+        await axios.post(`/api/assignments/submit_assignment/${userId}/${assignmentId}/${username}/${comment}`, data, config);
         dispatch({
             type: SUBMIT_SUCCESS
         });

@@ -58,6 +58,7 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
 
     const [selectedFiles, setSelectedFiles] = React.useState([]);
     const [redirect, setRedirect] = React.useState(false);
+    const [comment, setComment] = React.useState('');
     const onInputFileChanged = event => {
         setSelectedFiles([...selectedFiles, event.target.files]);
     };
@@ -68,6 +69,7 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
             return <Redirect to='/instructor_dashboard' />
         }
     }
+
     const onDeleteIconClick = e => {
         const { id } = e.target;
         let newSelectedFiles = selectedFiles.slice(0);
@@ -78,7 +80,7 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     const onSubmit = async e => {
         e.preventDefault();
         setUploading();
-        await submitAssignment(user._id, assignment._id, 'test_user', selectedFiles);
+        await submitAssignment(user._id, assignment._id, 'test_user', comment, selectedFiles);
         swal.fire({
             icon: 'success',
             title: 'Successfuly Submitted Assignment!',
@@ -110,6 +112,9 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
             </ListItem>
         )
     });
+    const onCommentChange = e => {
+        setComment(e.target.value);
+    }
     useEffect(() => {
         getAssignment(match.params.id);
     }, [getAssignment]);
@@ -154,6 +159,18 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
                             readOnly: true,
                         }}
                         variant="outlined"
+                    />
+                    <TextField
+                        id="comment"
+                        label="Comment"
+                        placeholder="Enter your comment here"
+                        className={classes.textField}
+                        margin="normal"
+                        multiline
+                        rows='3'
+                        variant="outlined"
+                        onChange={onCommentChange}
+                        value={comment}
                     />
                     <Grid item xs={12} md={6}>
                         <div>

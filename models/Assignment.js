@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const Mongoose = require('mongoose');
+const ObjectId = Mongoose.Types.ObjectId;
 // Create Schema
 const AssignmentSchema = new Schema({
     assignmentAdminID: {
-        type: String,
+        type: ObjectId,
         required: true
     },
     name: {
