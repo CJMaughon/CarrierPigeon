@@ -125,18 +125,13 @@ router.get('/unapproved', appAuth, async (req, res) => {
 // @access 	Public
 router.post('/approve_user', appAuth, async (req, res) => {
   try {
-
-    const users = await User.updateMany({ _id: { $in: req.body.selectedUsers } }, { $set: { isUserApproved: true } });    // createUserFolder(12345).then((response) => {
-    //   console.log(response.config.data.name);
-    // });
-    const userIds = req.body.selectedUsers;
+    const users = await User.updateMany({ _id: { $in: req.body.selectedUsers } }, { $set: { isUserApproved: true } });
     await User.find({ _id: { $in: req.body.selectedUsers } }).then((found) => {
       found.forEach(user => {
         createUserFolder(user.name);
       });
     });
     res.json(users);
-    // res.json(users);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
