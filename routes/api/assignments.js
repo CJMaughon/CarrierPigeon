@@ -3,14 +3,26 @@ const router = express.Router();
 const Assignment = require('../../models/Assignment');
 const Submission = require('../../models/Submission');
 const { check, validationResult } = require('express-validator');
-const auth = require('../../middleware/auth');
+const appAuth = require('../../middleware/auth');
 const uuid = require('uuid/v1');
 var multer = require('multer');
+
+const { google } = require('googleapis');
+const scopes = [
+  'https://www.googleapis.com/auth/drive'
+];
+// const for drive api
+const credentials = require('../../credentials.json');
+const auth = new google.auth.JWT(
+  credentials.client_email, null,
+  credentials.private_key, scopes
+);
+const drive = google.drive({ version: 'v3', auth });
 // @route 	POST api/assignments
 // @desc	Route to create new assignments
 // @access 	Public
 router.post(
-    '/', auth,
+    '/', appAuth,
     [
         check('name', 'Name is required')
             .not()
@@ -55,7 +67,7 @@ router.post(
 
 // @route 	GET api/assignments
 // @access 	Public
-router.get('/', auth, async (req, res) => {
+router.get('/', appAuth, async (req, res) => {
     try {
         const assignments = await Assignment.aggregate([
             {
@@ -92,7 +104,7 @@ router.get('/', auth, async (req, res) => {
 
 // @route 	GET api/assignments/:id
 // @access 	Public
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', appAuth, async (req, res) => {
     try {
         const assignment = await Assignment.findById(req.params.id);
 
@@ -112,7 +124,7 @@ router.get('/:id', auth, async (req, res) => {
 
 // @route 	GET api/assignments/assigned
 // @access 	Public
-router.get('/assigned/:id', auth, async (req, res) => {
+router.get('/assigned/:id', appAuth, async (req, res) => {
     const userId = req.params.id;
     try {
         let assignments = await Assignment.find({ assignedInstructor: userId }).sort({ dueDate: 1 });
@@ -146,7 +158,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).array('file');
 
-router.post('/submit_assignment/:user_id/:assignment_id/:username/:comment', auth, async (req, res) => {
+router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, async (req, res) => {
     try {
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
@@ -159,7 +171,13 @@ router.post('/submit_assignment/:user_id/:assignment_id/:username/:comment', aut
         });
         // user id here 
         const user_id = req.params.user_id;
+        const user = await User.findById(user_id);
 
+        findUserFolder(user.name).then((response) => {
+            response.data.files.map(file => {
+                console.log("Id: " + file.id + "\nName: " + file.name);
+            });
+        });
         // array to stored google file urls after uploaded
         const google_file_urls = [];
 
@@ -183,5 +201,14 @@ router.post('/submit_assignment/:user_id/:assignment_id/:username/:comment', aut
         res.status(500).send('Server Error');
     }
 });
+
+
+function findUserFolder(username) {
+    const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
+    return drive.files.list({
+        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + username + "'",
+        parents: [folderId]   
+    });
+}
 module.exports = router;
 
