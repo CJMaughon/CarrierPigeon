@@ -5,7 +5,19 @@ const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
-const auth = require('../../middleware/auth');
+const appAuth = require('../../middleware/auth');
+
+const { google } = require('googleapis');
+const scopes = [
+  'https://www.googleapis.com/auth/drive'
+];
+// const for drive api
+const credentials = require('../../credentials.json');
+const auth = new google.auth.JWT(
+  credentials.client_email, null,
+  credentials.private_key, scopes
+);
+const drive = google.drive({ version: 'v3', auth });
 // @route 	POST api/users
 // @desc	Route to create new users
 // @access 	Public
@@ -85,7 +97,7 @@ router.post(
 // @route 	GET api/users/approved
 // @desc	Test route
 // @access 	Public
-router.get('/approved', auth, async (req, res) => {
+router.get('/approved', appAuth, async (req, res) => {
   try {
     const users = await User.find({ isInstructor: { $eq: true }, isUserApproved: { $eq: true } }).sort({ date: -1 });
     res.json(users);
@@ -98,7 +110,7 @@ router.get('/approved', auth, async (req, res) => {
 // @route 	GET api/users/unapproved
 // @desc	Test route
 // @access 	Public
-router.get('/unapproved', auth, async (req, res) => {
+router.get('/unapproved', appAuth, async (req, res) => {
   try {
     const users = await User.find({ isInstructor: { $eq: true }, isUserApproved: { $eq: false } }).sort({ date: -1 });
     res.json(users);
@@ -111,14 +123,38 @@ router.get('/unapproved', auth, async (req, res) => {
 // @route 	POST api/users/approve_user
 // @desc	Test route
 // @access 	Public
-router.post('/approve_user', auth, async (req, res) => {
+router.post('/approve_user', appAuth, async (req, res) => {
   try {
 
-    const users = await User.updateMany({ _id: { $in: req.body.selectedUsers } }, { $set: { isUserApproved: true } });
+    const users = await User.updateMany({ _id: { $in: req.body.selectedUsers } }, { $set: { isUserApproved: true } });    // createUserFolder(12345).then((response) => {
+    //   console.log(response.config.data.name);
+    // });
+    const userIds = req.body.selectedUsers;
+    await User.find({ _id: { $in: req.body.selectedUsers } }).then((found) => {
+      found.forEach(user => {
+        createUserFolder(user.name);
+      })
+    });
     res.json(users);
+    // res.json(users);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
+
+
+  function createUserFolder(userId) {
+    const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
+
+    let fileMetadata = {
+      'name': userId,
+      'mimeType': 'application/vnd.google-apps.folder',
+      parents: [folderId]
+    };
+    return drive.files.create({
+      resource: fileMetadata,
+      fields: 'id'
+    });
+  }
 module.exports = router;

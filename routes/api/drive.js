@@ -16,12 +16,12 @@ const scopes = [
 
 
 // const for drive api
-// const credentials = require('../../credentials.json');
-// const auth = new google.auth.JWT(
-//   credentials.client_email, null,
-//   credentials.private_key, scopes
-// );
-// const drive = google.drive({ version: 'v3', auth });
+const credentials = require('../../credentials.json');
+const auth = new google.auth.JWT(
+  credentials.client_email, null,
+  credentials.private_key, scopes
+);
+const drive = google.drive({ version: 'v3', auth });
 
 
 
@@ -92,7 +92,7 @@ router.get('/', appAuth, async (req, res) => {
   try {
     getFolders().then((response) => {
       res.send(response.data.files.map((file) => {
-        return file.name;
+        return file.id;
       }));
     });
   } catch (err) {
@@ -113,7 +113,9 @@ router.post('/', appAuth, async (req, res) => {
 });
 
 function getFolders() {
-  return drive.files.list();
+  return drive.files.list({
+    q: "name='CarrierPigeonTest'"
+  });
 }
 
 function uploadTestFile() {
