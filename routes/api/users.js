@@ -133,7 +133,7 @@ router.post('/approve_user', appAuth, async (req, res) => {
     await User.find({ _id: { $in: req.body.selectedUsers } }).then((found) => {
       found.forEach(user => {
         createUserFolder(user.name);
-      })
+      });
     });
     res.json(users);
     // res.json(users);
