@@ -128,7 +128,7 @@ router.post('/approve_user', appAuth, async (req, res) => {
     const users = await User.updateMany({ _id: { $in: req.body.selectedUsers } }, { $set: { isUserApproved: true } });
     await User.find({ _id: { $in: req.body.selectedUsers } }).then((found) => {
       found.forEach(user => {
-        createUserFolder(user.name);
+        createUserFolder(user.email);
       });
     });
     res.json(users);
@@ -139,11 +139,11 @@ router.post('/approve_user', appAuth, async (req, res) => {
 });
 
 
-  function createUserFolder(userId) {
+  function createUserFolder(userEmail) {
     const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
 
     let fileMetadata = {
-      'name': userId,
+      'name': userEmail,
       'mimeType': 'application/vnd.google-apps.folder',
       parents: [folderId]
     };

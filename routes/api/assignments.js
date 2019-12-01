@@ -7,6 +7,8 @@ const appAuth = require('../../middleware/auth');
 const uuid = require('uuid/v1');
 var multer = require('multer');
 
+const fs = require('fs');
+const path = require('path');
 const { google } = require('googleapis');
 const scopes = [
   'https://www.googleapis.com/auth/drive'
@@ -173,10 +175,10 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
         const user_id = req.params.user_id;
         const user = await User.findById(user_id);
 
-        findUserFolder(user.name).then((response) => {
-            response.data.files.map(file => {
-                console.log("Id: " + file.id + "\nName: " + file.name);
-            });
+        findUserFolder(user.email).then((response) => {
+            const userFolderId = response.data.files[0].id;
+
+            uploadTestFile(userFolderId);
         });
         // array to stored google file urls after uploaded
         const google_file_urls = [];
@@ -203,12 +205,44 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
 });
 
 
-function findUserFolder(username) {
+function findUserFolder(userEmail) {
     const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
     return drive.files.list({
-        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + username + "'",
+        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + userEmail + "'",
         parents: [folderId]   
     });
 }
+
+function uploadTestFile(folderId) {
+    fs.readdir(path.join(__dirname, '../../downloads'), function (err, files) {
+      if (err) {
+        return console.log(err);
+      }
+
+      console.log(files);
+
+      const fileMetadata = {
+        'name': files[0],
+        parents: [folderId]
+      };
+      
+      const media = {
+        body: fs.createReadStream('/home/cjm/CarrierPigeon/downloads/' + files[0])
+      };
+  
+      return drive.files.create({
+        resource: fileMetadata,
+        media: media,
+        fields: 'id'
+      }, function (err, file) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log(file.data.id);
+          fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + files[0])
+        }
+      });
+    });
+  }
 module.exports = router;
 
