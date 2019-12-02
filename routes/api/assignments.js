@@ -173,7 +173,7 @@ const storage = multer.diskStorage({
         cb(null, 'downloads')
     },
     filename: function (req, file, cb) {
-        cb(null, 'Test_User-Test_Date' + '-' + file.originalname)
+        cb(null, file.originalname)
     }
 });
 

@@ -80,7 +80,7 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     const onSubmit = async e => {
         e.preventDefault();
         setUploading();
-        await submitAssignment(user._id, assignment._id, 'test_user', comment, selectedFiles);
+        await submitAssignment(user._id, assignment._id, comment, selectedFiles);
         swal.fire({
             icon: 'success',
             title: 'Successfuly Submitted Assignment!',
