@@ -95,30 +95,34 @@ const AssignmentInfoForm = ({ createNewAssigment, setSelectedUsers, selectedUser
                     <p className='lead'>
                         <i className='fas fa-book'></i> New Assignment
                                 </p>
-                    <TextField
-                        required
-                        label="Assignment Name"
-                        fullWidth
-                        name='name'
-                        className={classes.textField}
-                        margin="normal"
-                        variant="filled"
-                        value={name}
-                        onChange={onAssignmentFormChange}
-                    />
-                    <TextField
-                        id="filled-multiline-static"
-                        label="Assignment Detail"
-                        fullWidth
-                        multiline
-                        rows="3"
-                        value={detail_info}
-                        name='detail_info'
-                        className={classes.textField}
-                        onChange={onAssignmentFormChange}
-                        margin="normal"
-                        variant="filled"
-                    />
+                    <div>
+                        <TextField
+                            required
+                            label="Assignment Name"
+                            fullWidth
+                            name='name'
+                            className={classes.textField}
+                            margin="normal"
+                            variant="outlined"
+                            value={name}
+                            onChange={onAssignmentFormChange}
+                        />
+                    </div>
+                    <div>
+                        <TextField
+                            id="filled-multiline-static"
+                            label="Assignment Detail"
+                            fullWidth
+                            multiline
+                            rows="2"
+                            value={detail_info}
+                            name='detail_info'
+                            className={classes.textField}
+                            onChange={onAssignmentFormChange}
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </div>
                     <p className='lead'>Assigned Instructors</p>
                     <ul>
                         {items}
