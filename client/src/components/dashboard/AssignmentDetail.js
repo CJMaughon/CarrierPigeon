@@ -50,12 +50,13 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
                     </div>
                     <div>
                         {selectedIndex !== -1 &&
-                            <div>
+                            <div className="submission-detail-form">
                                 <h1 className='large'>Submision Detail</h1>
                                 <div>
                                     <TextField
                                         id="assignment-name"
                                         label="Instructor Name"
+                                        fullWidth
                                         defaultValue={submissionItems[selectedIndex].instructorName}
                                         margin="normal"
                                         InputProps={{
@@ -67,6 +68,7 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
                                 <div>
                                     <TextField
                                         id="assignment-name"
+                                        fullWidth
                                         label="Submission Comment"
                                         defaultValue={submissionItems[selectedIndex].comment}
                                         margin="normal"

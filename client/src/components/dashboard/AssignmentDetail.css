@@ -4,3 +4,8 @@
     align-items: auto;
     text-align: center;
 }
+
+.submission-detail-form {
+    margin-right : 5em;
+    margin-left: 2em;
+}
