@@ -53,7 +53,7 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
                     <div>
                         {selectedIndex !== -1 &&
                             <div className="submission-detail-form">
-                                <h1 className='large'>Submision Detail</h1>
+                                <h1 className='large'>Submission Detail</h1>
                                 <div>
                                     <TextField
                                         id="assignment-name"
