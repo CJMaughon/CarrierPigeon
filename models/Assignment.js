@@ -5,7 +5,7 @@ const ObjectId = Mongoose.Types.ObjectId;
 // Create Schema
 const AssignmentSchema = new Schema({
     assignmentAdminID: {
-        type: ObjectId,
+        type: String,
         required: true
     },
     name: {

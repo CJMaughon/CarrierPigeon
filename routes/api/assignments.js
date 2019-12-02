@@ -52,11 +52,29 @@ router.post(
                 detail,
                 dueDate,
             });
-            assignment.assignmentAdminID = assignmentId
-            assignment.assignedInstructor = instructor
+            assignment.assignmentAdminID = assignmentId;
+            assignment.assignedInstructor = instructor;
             await assignment.save();
         });
-        
+
+        let assignmentDueDate = JSON.stringify(dueDate);
+        assignmentDueDate = assignmentDueDate.substr(1, dueDate.indexOf('T'));
+
+        assignedInstructors.forEach(async instructor => {
+            let user = await User.findById(instructor);
+            findUserFolder(user.email).then(response => {
+
+                let userFolderId = response.data.files[0].id;
+
+                createAssignmentFolder(userFolderId, assignmentDueDate).catch(err => {
+                    console.error(err);
+                });
+            }).catch(err => {
+                console.error(err);
+            });
+        });
+
+
 
         try {
             await Promise.all(promises);
@@ -231,6 +249,20 @@ function findAssignmentFolder(userFolderId, assignmentDate) {
         parents: [userFolderId]
     });
 }
+
+function createAssignmentFolder(userFolderId, assignmentDate) {
+    const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
+
+    let fileMetadata = {
+      'name': assignmentDate,
+      'mimeType': 'application/vnd.google-apps.folder',
+      parents: [userFolderId]
+    };
+    return drive.files.create({
+      resource: fileMetadata,
+      fields: 'id'
+    });
+  }
 
 function uploadTestFile(folderId) {
     fs.readdir(path.join(__dirname, '../../downloads'), function (err, files) {
