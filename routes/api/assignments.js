@@ -268,7 +268,7 @@ function uploadFiles(folderId) {
 
       console.log(files);
 
-      return files.forEach(currentFile => {
+      files.forEach(currentFile => {
         const fileMetadata = {
             'name': currentFile,
             parents: [folderId]
@@ -279,7 +279,7 @@ function uploadFiles(folderId) {
             resumable: true
           };
       
-          return drive.files.create({
+          drive.files.create({
             resource: fileMetadata,
             media: media,
             fields: 'id'

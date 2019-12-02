@@ -134,7 +134,9 @@ export const submitAssignment = (
         };
         const data = new FormData();
         for (var i = 0; i < files.length; i++) {
-            data.append('file', files[i][0]);
+            console.log(data);
+            data.append('file', files[i]);
+            console.log(data);
         }
         await axios.post(`/api/assignments/submit_assignment/${userId}/${assignmentId}/${comment}`, data, config);
         dispatch({
