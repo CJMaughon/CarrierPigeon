@@ -66,7 +66,7 @@ router.post(
 
                 let userFolderId = response.data.files[0].id;
 
-                createAssignmentFolder(userFolderId, assignmentDueDate).catch(err => {
+                createAssignmentFolder(userFolderId, assignmentDueDate, user.email).catch(err => {
                     console.error(err);
                 });
             }).catch(err => {
@@ -202,7 +202,7 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
         findUserFolder(user.email).then((response) => {
             const userFolderId = response.data.files[0].id;
 
-            findAssignmentFolder(userFolderId, dueDate).then(async (file) =>  {
+            findAssignmentFolder(userFolderId, dueDate, user.email).then(async (file) =>  {
                 const assignmentFolderId = file.data.files[0].id;
 
                 uploadFiles(assignmentFolderId);
@@ -244,16 +244,16 @@ function findUserFolder(userEmail) {
     });
 }
 
-function findAssignmentFolder(userFolderId, assignmentDate) {
+function findAssignmentFolder(userFolderId, assignmentDate, userEmail) {
     return drive.files.list({
-        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + assignmentDate + "'",
+        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + assignmentDate + " (" + userEmail + ")'",
         parents: [userFolderId]
     });
 }
 
-function createAssignmentFolder(userFolderId, assignmentDate) {
+function createAssignmentFolder(userFolderId, assignmentDate, userEmail) {
     let fileMetadata = {
-      'name': assignmentDate,
+      'name': assignmentDate + ' (' + userEmail + ')',
       'mimeType': 'application/vnd.google-apps.folder',
       parents: [userFolderId]
     };
@@ -268,8 +268,6 @@ function uploadFiles(folderId) {
       if (err) {
         return console.log(err);
       }
-
-      console.log(files);
 
       files.forEach(currentFile => {
         const fileMetadata = {
