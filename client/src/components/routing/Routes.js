@@ -9,6 +9,7 @@ import SubmitAssignmentForm from '../assignment/SubmitAssignmentForm';
 import AdminDashboard from '../dashboard/AdminDashboard';
 import InstructorDashboard from '../dashboard/InstructorDashboard';
 import UnapprovedUserPage from '../dashboard/UnapprovedUserPage';
+import AssignmentDetail from '../dashboard/AssignmentDetail';
 import PrivateRoute from '../routing/PrivateRoute';
 const Routes = () => {
   return (
@@ -21,6 +22,7 @@ const Routes = () => {
         <PrivateRoute exact path='/edit_assignment_info' component={AssignmentInfoForm} />
         <PrivateRoute exact path='/instructor_dashboard' component={InstructorDashboard} />
         <PrivateRoute exact path='/assignments/:id' component={SubmitAssignmentForm} />
+        <PrivateRoute exact path='/manage_assignment/:id' component={AssignmentDetail} />
         <PrivateRoute exact path='/unapproved_page' component={UnapprovedUserPage} />
         <Route component={NotFound} />
       </Switch>

@@ -11,13 +11,13 @@ const fs = require('fs');
 const path = require('path');
 const { google } = require('googleapis');
 const scopes = [
-  'https://www.googleapis.com/auth/drive'
+    'https://www.googleapis.com/auth/drive'
 ];
 // const for drive api
 const credentials = require('../../credentials.json');
 const auth = new google.auth.JWT(
-  credentials.client_email, null,
-  credentials.private_key, scopes
+    credentials.client_email, null,
+    credentials.private_key, scopes
 );
 const drive = google.drive({ version: 'v3', auth });
 // @route 	POST api/assignments
@@ -200,7 +200,7 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
         findUserFolder(user.email).then((response) => {
             const userFolderId = response.data.files[0].id;
 
-            findAssignmentFolder(userFolderId, dueDate).then((file) =>  {
+            findAssignmentFolder(userFolderId, dueDate).then((file) => {
                 const assignmentFolderId = file.data.files[0].id;
 
                 uploadTestFile(assignmentFolderId);
@@ -221,6 +221,7 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
             assignmentID: assignment_id,
             comment: comment,
             files_url: google_file_urls,
+            instructorName: user.name,
         });
         await submission.save();
 
@@ -239,7 +240,7 @@ function findUserFolder(userEmail) {
     const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
     return drive.files.list({
         q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + userEmail + "'",
-        parents: [folderId]   
+        parents: [folderId]
     });
 }
 
@@ -254,48 +255,48 @@ function createAssignmentFolder(userFolderId, assignmentDate) {
     const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
 
     let fileMetadata = {
-      'name': assignmentDate,
-      'mimeType': 'application/vnd.google-apps.folder',
-      parents: [userFolderId]
+        'name': assignmentDate,
+        'mimeType': 'application/vnd.google-apps.folder',
+        parents: [userFolderId]
     };
     return drive.files.create({
-      resource: fileMetadata,
-      fields: 'id'
+        resource: fileMetadata,
+        fields: 'id'
     });
-  }
+}
 
 function uploadTestFile(folderId) {
     fs.readdir(path.join(__dirname, '../../downloads'), function (err, files) {
-      if (err) {
-        return console.log(err);
-      }
+        if (err) {
+            return console.log(err);
+        }
 
-      console.log(files);
+        console.log(files);
 
-      files.forEach(currentFile => {
-        const fileMetadata = {
-            'name': currentFile,
-            parents: [folderId]
-          };
-          
-          const media = {
-            body: fs.createReadStream('/home/cjm/CarrierPigeon/downloads/' + currentFile),
-            resumable: true
-          };
-      
-          drive.files.create({
-            resource: fileMetadata,
-            media: media,
-            fields: 'id'
-          }, function (err, file) {
-            if (err) {
-              console.error(err);
-            } else {
-              fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + currentFile);
-            }
-          });
+        files.forEach(currentFile => {
+            const fileMetadata = {
+                'name': currentFile,
+                parents: [folderId]
+            };
+
+            const media = {
+                body: fs.createReadStream('/home/cjm/CarrierPigeon/downloads/' + currentFile),
+                resumable: true
+            };
+
+            drive.files.create({
+                resource: fileMetadata,
+                media: media,
+                fields: 'id'
+            }, function (err, file) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + currentFile);
+                }
+            });
         });
-      })
-  }
+    })
+}
 module.exports = router;
 

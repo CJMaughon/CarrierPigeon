@@ -47,7 +47,9 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
       minWidth: 700,
     },
   }));
-
+  function handleCellClick(id) {
+    window.location.href = `/manage_assignment/${id}`
+  }
   const CustomizedTables = () => {
     const classes = useStyles();
 
@@ -66,7 +68,11 @@ const AdminDashboard = ({ getAssignments, loading, authLoading, assignments, aut
             </TableHead>
             <TableBody>
               {assignments.map(row => (
-                <StyledTableRow key={row._id.assignmentAdminID}>
+                <StyledTableRow
+                  key={row._id.assignmentAdminID}
+                  hover={true}
+                  onClick={() => handleCellClick(row._id.assignmentAdminID)}
+                >
                   <StyledTableCell component="th" scope="row">
                     {row._id.name}
                   </StyledTableCell>

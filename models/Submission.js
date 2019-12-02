@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Mongoose = require('mongoose');
-const ObjectId = Mongoose.Types.ObjectId;
 // Create Schema
 const SubmissionSchema = new Schema({
     assignmentID: {
-        type: ObjectId,
+        type: String,
+        required: true
+    },
+    instructorName: {
+        type: String,
         required: true
     },
     comment: {
