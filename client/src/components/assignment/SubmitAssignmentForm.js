@@ -21,7 +21,6 @@ import { green } from '@material-ui/core/colors';
 import swal from 'sweetalert2';
 
 import { Redirect } from 'react-router-dom';
-import { userInfo } from 'os';
 const formatDate = date => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() + 1900}`;
 }
@@ -60,7 +59,7 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     const [redirect, setRedirect] = React.useState(false);
     const [comment, setComment] = React.useState('');
     const onInputFileChanged = event => {
-        setSelectedFiles([...selectedFiles, event.target.files]);
+        setSelectedFiles([...selectedFiles, event.target.files[0]]);
     };
 
 
@@ -80,7 +79,7 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     const onSubmit = async e => {
         e.preventDefault();
         setUploading();
-        await submitAssignment(user._id, assignment._id, 'test_user', comment, selectedFiles);
+        await submitAssignment(user._id, assignment._id, comment, selectedFiles);
         swal.fire({
             icon: 'success',
             title: 'Successfuly Submitted Assignment!',
@@ -90,14 +89,14 @@ const SubmitAssignmentForm = ({ getAssignment, setUploading, submitAssignment, a
     };
     const fileItems = selectedFiles && selectedFiles.map((files, index) => {
         return (
-            <ListItem key={files[0].name} id={index}>
+            <ListItem key={files.name} id={index}>
                 <ListItemAvatar>
                     <Avatar>
                         <AttachmentIcon />
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                    primary={files[0].name}
+                    primary={files.name}
                     secondary={false}
                 />
                 <ListItemSecondaryAction id={index}>

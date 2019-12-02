@@ -123,7 +123,6 @@ export const setUploading = () => async dispatch => {
 export const submitAssignment = (
     userId,
     assignmentId,
-    username,
     comment,
     files,
 ) => async dispatch => {
@@ -135,17 +134,18 @@ export const submitAssignment = (
         };
         const data = new FormData();
         for (var i = 0; i < files.length; i++) {
-            data.append('file', files[i][0]);
+            console.log(data);
+            data.append('file', files[i]);
+            console.log(data);
         }
-        await axios.post(`/api/assignments/submit_assignment/${userId}/${assignmentId}/${username}/${comment}`, data, config);
+        await axios.post(`/api/assignments/submit_assignment/${userId}/${assignmentId}/${comment}`, data, config);
         dispatch({
             type: SUBMIT_SUCCESS
         });
     } catch (err) {
-        console.log(err)
-        const errors = err.response.data.errors;
-        if (errors) {
-            console.log(errors);
+        console.log(err);
+        if (err) {
+            console.log(err);
         }
         dispatch({
             type: SUBMIT_FAIL

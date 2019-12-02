@@ -66,7 +66,7 @@ router.post(
 
                 let userFolderId = response.data.files[0].id;
 
-                createAssignmentFolder(userFolderId, assignmentDueDate).catch(err => {
+                createAssignmentFolder(userFolderId, assignmentDueDate, user.email).catch(err => {
                     console.error(err);
                 });
             }).catch(err => {
@@ -173,7 +173,7 @@ const storage = multer.diskStorage({
         cb(null, 'downloads')
     },
     filename: function (req, file, cb) {
-        cb(null, 'Test_User-Test_Date' + '-' + file.originalname)
+        cb(null, file.originalname)
     }
 });
 
@@ -197,37 +197,43 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
         let dueDate = JSON.stringify(assignmentToSubmit.dueDate);
         dueDate = dueDate.substr(1, dueDate.indexOf('T') - 1);
 
+        // array to stored google file urls after uploaded
+        const google_file_urls = [];
+        console.log(req.files);
+        for (let i = 0; i < req.files.length; i++) {
+            console.log(req.files[i])
+            google_file_urls.push(req.files[i].originalname)
+        }
+
+
         findUserFolder(user.email).then((response) => {
             const userFolderId = response.data.files[0].id;
 
-            findAssignmentFolder(userFolderId, dueDate).then((file) => {
+            findAssignmentFolder(userFolderId, dueDate, user.email).then(async (file) => {
                 const assignmentFolderId = file.data.files[0].id;
 
-                uploadTestFile(assignmentFolderId);
+                uploadFiles(assignmentFolderId);
+
+
+                const comment = req.params.comment;
+                const submission = new Submission({
+                    assignmentID: assignmentToSubmit.assignmentAdminID,
+                    comment: comment,
+                    files_url: google_file_urls,
+                    instructorName: user.name,
+                });
+                await submission.save();
+
+                await Assignment.findById(req.params.assignment_id).updateOne({}, { isSubmitted: true, status: 'submitted' });
+                res.json({ message: 'submitted' });
             }).catch(err => {
                 console.error(err);
+                res.status(500).send('Server Error');
             });
         }).catch(err => {
             console.error(err);
+            res.status(500).send('Server Error');
         });
-        // array to stored google file urls after uploaded
-        const google_file_urls = [];
-
-        // TODO: post files to google and add url to google_file_urls array
-
-        const assignment_id = req.params.assignment_id;
-        const comment = req.params.comment;
-        const submission = new Submission({
-            assignmentID: assignment_id,
-            comment: comment,
-            files_url: google_file_urls,
-            instructorName: user.name,
-        });
-        await submission.save();
-
-        const assignment = await Assignment.findById(req.params.assignment_id).updateOne({}, { isSubmitted: true, status: 'submitted' });
-        console.log("Files have been added to downloads folder!")
-        res.json({ message: 'submitted' });
     } catch (err) {
         console.log("get here ?")
         console.error(err.message);
@@ -244,18 +250,16 @@ function findUserFolder(userEmail) {
     });
 }
 
-function findAssignmentFolder(userFolderId, assignmentDate) {
+function findAssignmentFolder(userFolderId, assignmentDate, userEmail) {
     return drive.files.list({
-        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + assignmentDate + "'",
+        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + assignmentDate + " (" + userEmail + ")'",
         parents: [userFolderId]
     });
 }
 
-function createAssignmentFolder(userFolderId, assignmentDate) {
-    const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
-
+function createAssignmentFolder(userFolderId, assignmentDate, userEmail) {
     let fileMetadata = {
-        'name': assignmentDate,
+        'name': assignmentDate + ' (' + userEmail + ')',
         'mimeType': 'application/vnd.google-apps.folder',
         parents: [userFolderId]
     };
@@ -265,13 +269,11 @@ function createAssignmentFolder(userFolderId, assignmentDate) {
     });
 }
 
-function uploadTestFile(folderId) {
+function uploadFiles(folderId) {
     fs.readdir(path.join(__dirname, '../../downloads'), function (err, files) {
         if (err) {
             return console.log(err);
         }
-
-        console.log(files);
 
         files.forEach(currentFile => {
             const fileMetadata = {
@@ -280,8 +282,7 @@ function uploadTestFile(folderId) {
             };
 
             const media = {
-                body: fs.createReadStream('/home/cjm/CarrierPigeon/downloads/' + currentFile),
-                resumable: true
+                body: fs.createReadStream(path.join(__dirname, '../../downloads/' + currentFile))
             };
 
             drive.files.create({
@@ -292,11 +293,11 @@ function uploadTestFile(folderId) {
                 if (err) {
                     console.error(err);
                 } else {
-                    fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + currentFile);
+                    console.log(file.data.id);
+                    fs.unlinkSync(path.join(__dirname, '../../downloads/' + currentFile));
                 }
             });
         });
     })
 }
 module.exports = router;
-
