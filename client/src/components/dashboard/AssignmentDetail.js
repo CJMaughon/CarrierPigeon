@@ -36,14 +36,16 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
                             </div>
                             {submissionItems.map(function (item, idx) {
                                 return (
-                                    <Button
-                                        key={idx}
-                                        id={idx}
-                                        variant="contained"
-                                        component="span"
-                                        onClick={onAssignmentSelectClick}>
-                                        {item.instructorName} 's Submission
+                                    <div className="assignment-select-button">
+                                        <Button
+                                            key={idx}
+                                            id={idx}
+                                            variant="contained"
+                                            component="span"
+                                            onClick={onAssignmentSelectClick}>
+                                            {item.instructorName} 's Submission
                                     </Button>
+                                    </div>
                                 );
                             })}
                         </div>
@@ -57,7 +59,7 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
                                         id="assignment-name"
                                         label="Instructor Name"
                                         fullWidth
-                                        defaultValue={submissionItems[selectedIndex].instructorName}
+                                        value={selectedIndex >= 0 ? submissionItems[selectedIndex].instructorName : null}
                                         margin="normal"
                                         InputProps={{
                                             readOnly: true,
@@ -70,7 +72,7 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
                                         id="assignment-name"
                                         fullWidth
                                         label="Submission Comment"
-                                        defaultValue={submissionItems[selectedIndex].comment}
+                                        value={selectedIndex >= 0 ? submissionItems[selectedIndex].comment : null}
                                         margin="normal"
                                         InputProps={{
                                             readOnly: true,
