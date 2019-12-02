@@ -56,6 +56,7 @@ router.post(
             assignment.assignedInstructor = instructor
             await assignment.save();
         });
+        
 
         try {
             await Promise.all(promises);
@@ -174,11 +175,22 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
         // user id here 
         const user_id = req.params.user_id;
         const user = await User.findById(user_id);
+        const assignmentToSubmit = await Assignment.findById(req.params.assignment_id);
+        let dueDate = JSON.stringify(assignmentToSubmit.dueDate);
+        dueDate = dueDate.substr(1, dueDate.indexOf('T') - 1);
 
         findUserFolder(user.email).then((response) => {
             const userFolderId = response.data.files[0].id;
 
-            uploadTestFile(userFolderId);
+            findAssignmentFolder(userFolderId, dueDate).then((file) =>  {
+                const assignmentFolderId = file.data.files[0].id;
+
+                uploadTestFile(assignmentFolderId);
+            }).catch(err => {
+                console.error(err);
+            });
+        }).catch(err => {
+            console.error(err);
         });
         // array to stored google file urls after uploaded
         const google_file_urls = [];
@@ -213,6 +225,13 @@ function findUserFolder(userEmail) {
     });
 }
 
+function findAssignmentFolder(userFolderId, assignmentDate) {
+    return drive.files.list({
+        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + assignmentDate + "'",
+        parents: [userFolderId]
+    });
+}
+
 function uploadTestFile(folderId) {
     fs.readdir(path.join(__dirname, '../../downloads'), function (err, files) {
       if (err) {
@@ -221,28 +240,30 @@ function uploadTestFile(folderId) {
 
       console.log(files);
 
-      const fileMetadata = {
-        'name': files[0],
-        parents: [folderId]
-      };
+      files.forEach(currentFile => {
+        const fileMetadata = {
+            'name': currentFile,
+            parents: [folderId]
+          };
+          
+          const media = {
+            body: fs.createReadStream('/home/cjm/CarrierPigeon/downloads/' + currentFile),
+            resumable: true
+          };
       
-      const media = {
-        body: fs.createReadStream('/home/cjm/CarrierPigeon/downloads/' + files[0])
-      };
-  
-      return drive.files.create({
-        resource: fileMetadata,
-        media: media,
-        fields: 'id'
-      }, function (err, file) {
-        if (err) {
-          console.error(err);
-        } else {
-          console.log(file.data.id);
-          fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + files[0])
-        }
-      });
-    });
+          drive.files.create({
+            resource: fileMetadata,
+            media: media,
+            fields: 'id'
+          }, function (err, file) {
+            if (err) {
+              console.error(err);
+            } else {
+              fs.unlinkSync('/home/cjm/CarrierPigeon/downloads/' + currentFile);
+            }
+          });
+        });
+      })
   }
 module.exports = router;
 
