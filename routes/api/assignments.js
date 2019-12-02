@@ -206,17 +206,6 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
                 const assignmentFolderId = file.data.files[0].id;
 
                 uploadFiles(assignmentFolderId);
-                const google_file_urls = [];
-
-                const assignment_id = req.params.assignment_id;
-                const comment = req.params.comment;
-                const submission = new Submission({
-                    assignmentID: assignment_id,
-                    comment: comment,
-                    files_url: google_file_urls,
-                });
-                await submission.save();
-                res.json({ message: 'submitted' });
             }).catch(err => {
                 console.error(err);
                 res.status(500).send('Server Error');
@@ -225,6 +214,20 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
             console.error(err);
             res.status(500).send('Server Error');
         });
+
+        const google_file_urls = [];
+
+        const assignment_id = req.params.assignment_id;
+        const comment = req.params.comment;
+        const submission = new Submission({
+            assignmentID: assignment_id,
+            comment: comment,
+            files_url: google_file_urls,
+        });
+        await submission.save();
+
+        await Assignment.findById(req.params.assignment_id).updateOne({}, { isSubmitted: true, status: 'submitted' });
+        res.json({ message: 'submitted' });
     } catch (err) {
         console.log("get here ?")
         console.error(err.message);
