@@ -1,0 +1,16 @@
+.instructor-heading {
+    margin-bottom: 2em;
+    align-content: center;
+    align-items: auto;
+    text-align: center;
+}
+
+.submission-detail-form {
+    margin-right : 5em;
+    margin-left: 2em;
+}
+
+.assignment-select-button {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}

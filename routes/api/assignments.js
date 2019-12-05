@@ -11,13 +11,13 @@ const fs = require('fs');
 const path = require('path');
 const { google } = require('googleapis');
 const scopes = [
-  'https://www.googleapis.com/auth/drive'
+    'https://www.googleapis.com/auth/drive'
 ];
 // const for drive api
 const credentials = require('../../credentials.json');
 const auth = new google.auth.JWT(
-  credentials.client_email, null,
-  credentials.private_key, scopes
+    credentials.client_email, null,
+    credentials.private_key, scopes
 );
 const drive = google.drive({ version: 'v3', auth });
 // @route 	POST api/assignments
@@ -198,26 +198,32 @@ router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, asyn
         dueDate = dueDate.substr(1, dueDate.indexOf('T') - 1);
 
         // array to stored google file urls after uploaded
+        const google_file_urls = [];
+        console.log(req.files);
+        for (let i = 0; i < req.files.length; i++) {
+            console.log(req.files[i])
+            google_file_urls.push(req.files[i].originalname)
+        }
+
 
         findUserFolder(user.email).then((response) => {
             const userFolderId = response.data.files[0].id;
 
-            findAssignmentFolder(userFolderId, dueDate, user.email).then(async (file) =>  {
+            findAssignmentFolder(userFolderId, dueDate, user.email).then(async (file) => {
                 const assignmentFolderId = file.data.files[0].id;
 
                 uploadFiles(assignmentFolderId);
 
-                const google_file_urls = [];
 
-                const assignment_id = req.params.assignment_id;
                 const comment = req.params.comment;
                 const submission = new Submission({
-                    assignmentID: assignment_id,
+                    assignmentID: assignmentToSubmit.assignmentAdminID,
                     comment: comment,
                     files_url: google_file_urls,
+                    instructorName: user.name,
                 });
                 await submission.save();
-        
+
                 await Assignment.findById(req.params.assignment_id).updateOne({}, { isSubmitted: true, status: 'submitted' });
                 res.json({ message: 'submitted' });
             }).catch(err => {
@@ -240,7 +246,7 @@ function findUserFolder(userEmail) {
     const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
     return drive.files.list({
         q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + userEmail + "'",
-        parents: [folderId]   
+        parents: [folderId]
     });
 }
 
@@ -253,46 +259,45 @@ function findAssignmentFolder(userFolderId, assignmentDate, userEmail) {
 
 function createAssignmentFolder(userFolderId, assignmentDate, userEmail) {
     let fileMetadata = {
-      'name': assignmentDate + ' (' + userEmail + ')',
-      'mimeType': 'application/vnd.google-apps.folder',
-      parents: [userFolderId]
+        'name': assignmentDate + ' (' + userEmail + ')',
+        'mimeType': 'application/vnd.google-apps.folder',
+        parents: [userFolderId]
     };
     return drive.files.create({
-      resource: fileMetadata,
-      fields: 'id'
+        resource: fileMetadata,
+        fields: 'id'
     });
-  }
+}
 
 function uploadFiles(folderId) {
     fs.readdir(path.join(__dirname, '../../downloads'), function (err, files) {
-      if (err) {
-        return console.log(err);
-      }
+        if (err) {
+            return console.log(err);
+        }
 
-      files.forEach(currentFile => {
-        const fileMetadata = {
-            'name': currentFile,
-            parents: [folderId]
-          };
-          
-          const media = {
-            body: fs.createReadStream(path.join(__dirname, '../../downloads/' + currentFile))
-          };
-      
-          drive.files.create({
-            resource: fileMetadata,
-            media: media,
-            fields: 'id'
-          }, function (err, file) {
-            if (err) {
-              console.error(err);
-            } else {
-              console.log(file.data.id);
-              fs.unlinkSync(path.join(__dirname, '../../downloads/' + currentFile));
-            }
-          });
+        files.forEach(currentFile => {
+            const fileMetadata = {
+                'name': currentFile,
+                parents: [folderId]
+            };
+
+            const media = {
+                body: fs.createReadStream(path.join(__dirname, '../../downloads/' + currentFile))
+            };
+
+            drive.files.create({
+                resource: fileMetadata,
+                media: media,
+                fields: 'id'
+            }, function (err, file) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log(file.data.id);
+                    fs.unlinkSync(path.join(__dirname, '../../downloads/' + currentFile));
+                }
+            });
         });
-      })
-  }
+    })
+}
 module.exports = router;
-
