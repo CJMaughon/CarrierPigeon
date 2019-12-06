@@ -40,6 +40,11 @@ router.post(
             .isEmpty(),
     ],
     async (req, res) => {
+        let user = await User.findById(req.user.id);
+        if (user.isInstructor) {
+            return res.status(401).send("Unauthorized");
+        }
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -89,6 +94,11 @@ router.post(
 // @route 	GET api/assignments
 // @access 	Public
 router.get('/', appAuth, async (req, res) => {
+    let user = await User.findById(req.user.id);
+    if (user.isInstructor) {
+        return res.status(401).send("Unauthorized");
+    }
+
     try {
         const assignments = await Assignment.aggregate([
             {
@@ -128,9 +138,13 @@ router.get('/', appAuth, async (req, res) => {
 router.get('/:id', appAuth, async (req, res) => {
     try {
         const assignment = await Assignment.findById(req.params.id);
+        const user = await User.findById(req.user.id);
 
         if (!assignment) {
             return res.status(404).json({ msg: 'Assignment not found' });
+        }
+        if (req.user.id !== assignment.assignedInstructor && user.isInstructor) {
+            return res.status(401).send("Unauthorized");
         }
         res.json(assignment);
 
@@ -147,6 +161,11 @@ router.get('/:id', appAuth, async (req, res) => {
 // @access 	Public
 router.get('/assigned/:id', appAuth, async (req, res) => {
     const userId = req.params.id;
+    const user = await User.findById(req.user.id);
+    if (req.user.id !== userId && user.isInstructor) {
+        return res.status(401).send("Unauthorized");
+    }
+
     try {
         let assignments = await Assignment.find({ assignedInstructor: userId }).sort({ dueDate: 1 });
         assignments.map((assignment) => {
@@ -180,6 +199,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).array('file');
 
 router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, async (req, res) => {
+    const userId = req.params.user_id;
+    const user = await User.findById(req.user.id);
+    if (req.user.id !== userId && user.isInstructor) {
+        return res.status(401).send("Unauthorized");
+    }
+
     try {
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
