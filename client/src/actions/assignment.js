@@ -138,6 +138,10 @@ export const submitAssignment = (
             data.append('file', files[i]);
             console.log(data);
         }
+
+        if (!comment.length) {
+            comment = "No comment provided";
+        }
         await axios.post(`/api/assignments/submit_assignment/${userId}/${assignmentId}/${comment}`, data, config);
         dispatch({
             type: SUBMIT_SUCCESS
