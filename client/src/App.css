@@ -628,6 +628,7 @@ img {
   color: #21bff5;
   font-size: 1rem;
   margin-left: 4px;
+  cursor: pointer;
 }
 .logo-container {
   position: relative;

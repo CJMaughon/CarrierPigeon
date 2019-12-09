@@ -167,16 +167,20 @@ router.post('/approve_user', appAuth, async (req, res) => {
 
 
   function createUserFolder(userEmail) {
-    const folderId = '1bq0bYcdBjNPHAuowyTd_YGDXmEtiga-9'
-
-    let fileMetadata = {
-      'name': userEmail,
-      'mimeType': 'application/vnd.google-apps.folder',
-      parents: [folderId]
-    };
-    return drive.files.create({
-      resource: fileMetadata,
-      fields: 'id'
-    });
+    drive.files.list({
+      q: "name='CarrierPigeonTest'"
+    })
+      .then(response => response.data.files[0].id)
+      .then(id => {
+        let fileMetadata = {
+          'name': userEmail,
+          'mimeType': 'application/vnd.google-apps.folder',
+          parents: [id]
+        };
+        return drive.files.create({
+          resource: fileMetadata,
+          fields: 'id'
+        });
+      });
   }
 module.exports = router;

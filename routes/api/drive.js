@@ -113,7 +113,7 @@ router.post('/', appAuth, async (req, res) => {
 });
 
 function getFolders() {
-  return drive.files.list({
+  drive.files.list({
     q: "name='CarrierPigeonTest'"
   });
 }

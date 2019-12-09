@@ -16,7 +16,7 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
     useEffect(() => {
         getSubmissions(match.params.id);
     }, [getSubmissions]);
-    const [selectedIndex, setSelectedIndex] = React.useState(-1);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
     const onAssignmentSelectClick = e => {
         const { id } = e.target.parentNode;
         console.log(id);
@@ -59,7 +59,7 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
                                         id="assignment-name"
                                         label="Instructor Name"
                                         fullWidth
-                                        value={selectedIndex >= 0 ? submissionItems[selectedIndex].instructorName : null}
+                                        value={(submissionItems[selectedIndex] && selectedIndex >= 0) ? submissionItems[selectedIndex].instructorName : null}
                                         margin="normal"
                                         InputProps={{
                                             readOnly: true,
@@ -72,7 +72,7 @@ const AssignmentDetail = ({ loadingSubmission, submissionItems, getSubmissions, 
                                         id="assignment-name"
                                         fullWidth
                                         label="Submission Comment"
-                                        value={selectedIndex >= 0 ? submissionItems[selectedIndex].comment : null}
+                                        value={(submissionItems[selectedIndex] && selectedIndex >= 0) ? submissionItems[selectedIndex].comment : null}
                                         margin="normal"
                                         InputProps={{
                                             readOnly: true,

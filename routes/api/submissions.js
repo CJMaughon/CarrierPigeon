@@ -9,7 +9,7 @@ const User = require('../../models/User');
 // @access 	Public
 router.get('/:assignmentId', appAuth, async (req, res) => {
     const assignment_id = req.params.assignmentId;
-    const assignment = await Assignment.findById(assignment_id);
+    const assignment = await Assignment.find({ assignmentID: assignment_id});
     const user = await User.findById(req.user.id);
 
     if (!assignment) {
