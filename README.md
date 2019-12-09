@@ -25,6 +25,7 @@ You will also need a Google Account connected to Google Cloud Console
 9. Click the Create button, which will then download the JSON credentials.
 10. Move that file to the CarrierPigeon project directory, and rename it credentials.json
 11. Next, go to your Google Drive page for the account that manages the files, and right click on the folder containing all of those files. You will click share, and enter the service account's email. The service account is now a contributor, so it will now be able to upload to this folder, and access all of the files.
+12. You will need to edit the file users.js, at line 171. You will need to change the name to whatever the folder you are using as your base directory is.
 
 ## MongoDB Setup
   1. Register an account at https://cloud.mongodb.com/user#/atlas/login.
