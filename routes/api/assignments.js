@@ -40,7 +40,7 @@ router.post(
             .isEmpty(),
     ],
     async (req, res) => {
-        let user = await User.findById(req.user.id);
+        const user = await User.findById(req.user.id);
         if (user.isInstructor) {
             return res.status(401).send("Unauthorized");
         }
@@ -94,7 +94,11 @@ router.post(
 // @route 	GET api/assignments
 // @access 	Public
 router.get('/', appAuth, async (req, res) => {
-    let user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
+    if (!user) {
+        return res.status(401).send("Unauthorized");
+    }
+
     if (user.isInstructor) {
         return res.status(401).send("Unauthorized");
     }
@@ -143,6 +147,9 @@ router.get('/:id', appAuth, async (req, res) => {
         if (!assignment) {
             return res.status(404).json({ msg: 'Assignment not found' });
         }
+        if (!user) {
+            return res.status(401).send("Unauthorized");
+        }
         if (req.user.id !== assignment.assignedInstructor && user.isInstructor) {
             return res.status(401).send("Unauthorized");
         }
@@ -162,6 +169,9 @@ router.get('/:id', appAuth, async (req, res) => {
 router.get('/assigned/:id', appAuth, async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(req.user.id);
+    if (!user) {
+        return res.status(401).send("Unauthorized");
+    }
     if (req.user.id !== userId && user.isInstructor) {
         return res.status(401).send("Unauthorized");
     }
@@ -201,6 +211,10 @@ const upload = multer({ storage: storage }).array('file');
 router.post('/submit_assignment/:user_id/:assignment_id/:comment', appAuth, async (req, res) => {
     const userId = req.params.user_id;
     const user = await User.findById(req.user.id);
+    if (!user) {
+        return res.status(401).send("Unauthorized");
+    }
+
     if (req.user.id !== userId && user.isInstructor) {
         return res.status(401).send("Unauthorized");
     }

@@ -98,6 +98,15 @@ router.post(
 // @desc	Test route
 // @access 	Public
 router.get('/approved', appAuth, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  if (!user || user.isInstructor) {
+    return res.status(401).send("Unauthorized");
+  }
+
   try {
     const users = await User.find({ isInstructor: { $eq: true }, isUserApproved: { $eq: true } }).sort({ date: -1 });
     res.json(users);
@@ -111,6 +120,15 @@ router.get('/approved', appAuth, async (req, res) => {
 // @desc	Test route
 // @access 	Public
 router.get('/unapproved', appAuth, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  if (!user || user.isInstructor) {
+    return res.status(401).send("Unauthorized");
+  }
+
   try {
     const users = await User.find({ isInstructor: { $eq: true }, isUserApproved: { $eq: false } }).sort({ date: -1 });
     res.json(users);
@@ -124,6 +142,15 @@ router.get('/unapproved', appAuth, async (req, res) => {
 // @desc	Test route
 // @access 	Public
 router.post('/approve_user', appAuth, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  if (!user || user.isInstructor) {
+    return res.status(401).send("Unauthorized");
+  }
+  
   try {
     const users = await User.updateMany({ _id: { $in: req.body.selectedUsers } }, { $set: { isUserApproved: true } });
     await User.find({ _id: { $in: req.body.selectedUsers } }).then((found) => {
