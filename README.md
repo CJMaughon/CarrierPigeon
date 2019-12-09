@@ -26,6 +26,20 @@ You will also need a Google Account connected to Google Cloud Console
 10. Move that file to the CarrierPigeon project directory, and rename it credentials.json
 11. Next, go to your Google Drive page for the account that manages the files, and right click on the folder containing all of those files. You will click share, and enter the service account's email. The service account is now a contributor, so it will now be able to upload to this folder, and access all of the files.
 
+## MongoDB Setup
+  1. Register an account at https://cloud.mongodb.com/user#/atlas/login.
+  2. Create a new cluster.
+  3. On Clusters Tab, select "Connect".
+  4. Choose "Connect Your Application".
+  5. Copy the Connections String and set the string as the value of "mongoURI" in config/default.json
+  
+## Set up Admin Account
+  1. Register a normal account on Carrier Pigeon.
+  2. Sign in Mongo Atlas, Go to Cluster0 -> Collections.
+  3. Select Collection "users", find the user that has been created.
+  4. Set field "isInstructor" to false and "isUserApprove" to true.
+  5. The account now has admin privilege.
+  
 ## Download and Install Instructions
 Use the command
 ```
