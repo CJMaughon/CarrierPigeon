@@ -25,7 +25,7 @@
     "concurrently": "^3.6.1",
     "config": "^3.1.0",
     "cors": "^2.8.4",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "express-validator": "^6.2.0",
     "googleapis": "^43.0.0",
     "gravatar": "^1.6.0",
